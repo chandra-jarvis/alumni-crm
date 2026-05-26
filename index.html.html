@@ -1,0 +1,1942 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Alumni Sevak CRM</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+  :root{
+    --saffron:#E65100;--amber:#F57C00;--gold:#FFB300;--cream:#FFF8F0;
+    --warm-white:#FFFDF9;--deep:#3E1F00;--mid:#6D3A00;--light-amber:#FFF3E0;
+    --border:#F0D9BC;--muted:#9E6B3A;--success:#2E7D32;--danger:#C62828;
+    --info:#1565C0;--radius:12px;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--deep);min-height:100vh;}
+
+  /* HEADER */
+  .header{background:linear-gradient(135deg,#E65100 0%,#BF360C 60%,#8D1F00 100%);
+    position:sticky;top:0;z-index:100;box-shadow:0 4px 20px rgba(230,81,0,0.35);}
+  .header-inner{display:flex;align-items:center;justify-content:space-between;padding:14px 28px;}
+  .logo{display:flex;align-items:center;gap:12px;}
+  .logo-icon{width:42px;height:42px;background:rgba(255,255,255,0.18);border-radius:50%;
+    display:flex;align-items:center;justify-content:center;font-size:22px;}
+  .logo-text h1{font-family:'Playfair Display',serif;color:#fff;font-size:20px;font-weight:600;line-height:1.2;}
+  .logo-text p{color:rgba(255,255,255,0.75);font-size:12px;font-weight:300;}
+  .header-stats{display:flex;gap:20px;}
+  .hstat{text-align:center;}
+  .hstat-num{color:#fff;font-size:20px;font-weight:600;line-height:1;}
+  .hstat-lbl{color:rgba(255,255,255,0.65);font-size:11px;}
+
+  /* NAV */
+  .nav{background:#BF360C;overflow-x:auto;scrollbar-width:none;white-space:nowrap;border-top:1px solid rgba(255,255,255,0.12);}
+  .nav::-webkit-scrollbar{display:none;}
+  .nav-inner{display:flex;padding:0 20px;gap:2px;}
+  .nav-btn{background:none;border:none;color:rgba(255,255,255,0.75);padding:11px 16px;
+    font-family:'DM Sans',sans-serif;font-size:13px;font-weight:400;cursor:pointer;
+    border-bottom:3px solid transparent;transition:all .2s;white-space:nowrap;}
+  .nav-btn:hover{color:#fff;background:rgba(255,255,255,0.08);}
+  .nav-btn.active{color:#FFE082;font-weight:600;border-bottom-color:#FFE082;background:rgba(255,224,130,0.08);}
+  .nav-num{display:inline-flex;align-items:center;justify-content:center;background:rgba(255,255,255,0.18);
+    border-radius:10px;padding:1px 7px;font-size:11px;margin-left:6px;font-weight:600;}
+  .nav-btn.active .nav-num{background:rgba(255,224,130,0.25);color:#FFE082;}
+
+  /* MAIN */
+  .main{max-width:1280px;margin:0 auto;padding:28px 20px;}
+
+  /* SETTINGS BANNER */
+  .dsb-wrap{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;}
+  .dsb-main{background:linear-gradient(135deg,#2D1600 0%,#5C2E00 45%,#7A3D00 100%);
+    border-radius:16px;padding:22px 26px;position:relative;overflow:hidden;
+    border:1.5px solid rgba(255,179,0,0.18);box-shadow:0 6px 28px rgba(62,31,0,0.22);
+    display:flex;flex-direction:column;justify-content:space-between;min-height:130px;}
+  .dsb-main::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;
+    background:radial-gradient(circle,rgba(255,179,0,0.12) 0%,transparent 70%);border-radius:50%;}
+  .dsb-main-top{display:flex;align-items:flex-start;justify-content:space-between;z-index:1;position:relative;}
+  .dsb-gear-wrap{width:54px;height:54px;
+    background:linear-gradient(135deg,rgba(255,179,0,0.2),rgba(255,140,0,0.1));
+    border-radius:14px;display:flex;align-items:center;justify-content:center;
+    border:1.5px solid rgba(255,179,0,0.35);transition:transform .35s ease;cursor:pointer;flex-shrink:0;}
+  .dsb-gear-wrap:hover{transform:rotate(90deg);}
+  .dsb-gear-wrap svg{width:26px;height:26px;}
+  .dsb-badge{background:rgba(255,179,0,0.15);border:1px solid rgba(255,179,0,0.3);
+    border-radius:20px;padding:3px 10px;font-size:11px;color:#FFD54F;font-weight:600;}
+  .dsb-main-title{font-family:'Playfair Display',serif;color:#FFE082;font-size:17px;font-weight:600;
+    margin:12px 0 4px;z-index:1;position:relative;}
+  .dsb-main-sub{color:rgba(255,255,255,0.5);font-size:12px;line-height:1.55;z-index:1;position:relative;margin-bottom:14px;}
+  .dsb-main-btn{display:inline-flex;align-items:center;gap:8px;
+    background:linear-gradient(90deg,#FFB300,#FF8F00);color:#3E1F00;border:none;
+    border-radius:10px;padding:9px 20px;font-family:'DM Sans',sans-serif;font-size:13px;
+    font-weight:700;cursor:pointer;transition:all .2s;z-index:1;position:relative;
+    box-shadow:0 3px 12px rgba(255,179,0,0.35);width:fit-content;}
+  .dsb-main-btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(255,179,0,0.45);}
+  .dsb-stats-col{display:flex;flex-direction:column;gap:12px;}
+  .dsb-stat-card{background:var(--warm-white);border:1.5px solid var(--border);border-radius:14px;
+    padding:14px 18px;display:flex;align-items:center;gap:14px;transition:all .2s;
+    box-shadow:0 2px 8px rgba(230,81,0,0.06);}
+  .dsb-stat-card:hover{border-color:var(--amber);transform:translateX(3px);}
+  .dsb-stat-icon{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+  .dsb-stat-num{font-size:24px;font-weight:700;color:var(--deep);line-height:1;}
+  .dsb-stat-lbl{font-size:11px;color:var(--muted);margin-top:2px;}
+  .dsb-report-btn{display:flex;align-items:center;gap:10px;
+    background:linear-gradient(135deg,#1B5E20,#2E7D32);
+    border:1.5px solid rgba(46,125,50,0.4);border-radius:14px;padding:14px 18px;
+    cursor:pointer;transition:all .2s;color:#fff;font-family:'DM Sans',sans-serif;
+    box-shadow:0 3px 12px rgba(46,125,50,0.2);text-align:left;}
+  .dsb-report-btn:hover{transform:translateX(3px);box-shadow:0 6px 20px rgba(46,125,50,0.3);}
+  .dsb-report-icon{width:40px;height:40px;background:rgba(255,255,255,0.12);border-radius:11px;
+    display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+  .dsb-report-title{font-size:14px;font-weight:700;line-height:1;}
+  .dsb-report-sub{font-size:11px;color:rgba(255,255,255,0.6);margin-top:2px;}
+
+  /* DASH CARDS */
+  .dash-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-bottom:28px;}
+  .dash-card{background:var(--warm-white);border:1.5px solid var(--border);border-radius:var(--radius);
+    padding:20px;cursor:pointer;transition:all .22s;position:relative;overflow:hidden;}
+  .dash-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;border-radius:var(--radius) var(--radius) 0 0;}
+  .dash-card.c0::before{background:linear-gradient(90deg,#E65100,#FF8F00);}
+  .dash-card.c1::before{background:linear-gradient(90deg,#1565C0,#42A5F5);}
+  .dash-card.c2::before{background:linear-gradient(90deg,#2E7D32,#66BB6A);}
+  .dash-card.c3::before{background:linear-gradient(90deg,#6A1B9A,#AB47BC);}
+  .dash-card.c4::before{background:linear-gradient(90deg,#00695C,#26A69A);}
+  .dash-card.c5::before{background:linear-gradient(90deg,#C62828,#EF5350);}
+  .dash-card.c6::before{background:linear-gradient(90deg,#E65100,#FFB300);}
+  .dash-card.c7::before{background:linear-gradient(90deg,#0D47A1,#00BCD4);}
+  .dash-card.cr::before{background:linear-gradient(90deg,#37474F,#78909C);}
+  .dash-card.cm::before{background:linear-gradient(90deg,#0D47A1,#1976D2);}
+  .dash-card:hover{transform:translateY(-3px);box-shadow:0 8px 28px rgba(230,81,0,0.15);border-color:var(--amber);}
+  .dash-card-icon{font-size:28px;margin-bottom:10px;}
+  .dash-card h3{font-family:'Playfair Display',serif;font-size:14px;font-weight:500;margin-bottom:4px;color:var(--deep);}
+  .dash-card p{font-size:11px;color:var(--muted);line-height:1.5;}
+  .dash-card-count{position:absolute;top:18px;right:18px;background:var(--light-amber);
+    color:var(--saffron);font-size:20px;font-weight:700;padding:4px 10px;border-radius:8px;}
+
+  /* MODULE */
+  .module-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+  .module-title{display:flex;align-items:center;gap:12px;}
+  .module-title h2{font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:var(--deep);}
+  .module-title p{font-size:13px;color:var(--muted);}
+
+  /* BUTTONS */
+  .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 18px;border-radius:8px;
+    font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;border:none;transition:all .2s;}
+  .btn-primary{background:var(--saffron);color:#fff;}
+  .btn-primary:hover{background:#BF360C;}
+  .btn-secondary{background:var(--warm-white);color:var(--deep);border:1.5px solid var(--border);}
+  .btn-secondary:hover{background:var(--light-amber);border-color:var(--amber);}
+  .btn-success{background:#E8F5E9;color:#2E7D32;border:1.5px solid #A5D6A7;}
+  .btn-success:hover{background:#C8E6C9;}
+  .btn-info{background:#E3F2FD;color:#1565C0;border:1.5px solid #90CAF9;}
+  .btn-info:hover{background:#BBDEFB;}
+  .btn-danger{background:#FFEBEE;color:var(--danger);border:1.5px solid #FFCDD2;}
+  .btn-danger:hover{background:#FFCDD2;}
+  .btn-sm{padding:6px 12px;font-size:12px;}
+
+  /* SEARCH */
+  .search-bar{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap;}
+  .search-input{flex:1;min-width:200px;padding:9px 14px;border:1.5px solid var(--border);
+    border-radius:8px;font-family:'DM Sans',sans-serif;font-size:14px;background:var(--warm-white);color:var(--deep);outline:none;}
+  .search-input:focus{border-color:var(--amber);}
+  .filter-select{padding:9px 14px;border:1.5px solid var(--border);border-radius:8px;
+    font-family:'DM Sans',sans-serif;font-size:13px;background:var(--warm-white);color:var(--deep);outline:none;cursor:pointer;}
+
+  /* TABLE */
+  .table-wrap{background:var(--warm-white);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;}
+  table{width:100%;border-collapse:collapse;}
+  th{background:var(--light-amber);color:var(--mid);font-size:12px;font-weight:600;
+    text-transform:uppercase;letter-spacing:.6px;padding:12px 14px;text-align:left;}
+  td{padding:12px 14px;border-top:1px solid var(--border);font-size:13.5px;color:var(--deep);}
+  tr:hover td{background:#FFF8F0;}
+  .badge{display:inline-flex;align-items:center;padding:3px 10px;border-radius:20px;font-size:12px;font-weight:500;}
+  .badge-success{background:#E8F5E9;color:#2E7D32;}
+  .badge-warning{background:#FFF8E1;color:#E65100;}
+  .badge-info{background:#E3F2FD;color:#1565C0;}
+  .badge-danger{background:#FFEBEE;color:#C62828;}
+  .badge-neutral{background:var(--light-amber);color:var(--mid);}
+  .badge-purple{background:#F3E5F5;color:#6A1B9A;}
+
+  /* MODAL */
+  .modal-bg{display:none;position:fixed;inset:0;background:rgba(60,20,0,0.45);z-index:200;
+    align-items:center;justify-content:center;padding:20px;}
+  .modal-bg.open{display:flex;}
+  .modal{background:var(--warm-white);border-radius:16px;padding:28px;width:100%;max-width:580px;
+    max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.25);}
+  .modal h3{font-family:'Playfair Display',serif;font-size:20px;font-weight:600;color:var(--deep);margin-bottom:20px;}
+  .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+  .form-group{display:flex;flex-direction:column;gap:5px;}
+  .form-group.full{grid-column:1/-1;}
+  .form-group label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+  .form-control{padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;
+    font-family:'DM Sans',sans-serif;font-size:14px;background:#fff;color:var(--deep);outline:none;width:100%;}
+  .form-control:focus{border-color:var(--amber);}
+  .modal-actions{display:flex;gap:10px;margin-top:20px;justify-content:flex-end;}
+
+  /* SETTINGS MODAL */
+  .settings-modal{max-width:640px !important;}
+  .stg-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .stg-item{display:flex;flex-direction:column;gap:4px;}
+  .stg-item label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;}
+  .stg-section{font-size:12px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin:16px 0 10px;}
+
+  /* EMPTY */
+  .empty{text-align:center;padding:50px 20px;color:var(--muted);}
+  .empty-icon{font-size:44px;margin-bottom:14px;opacity:.5;}
+  .empty p{font-size:15px;}
+
+  /* SUMMARY */
+  .summary-row{display:flex;gap:12px;margin-bottom:18px;flex-wrap:wrap;}
+  .summary-pill{background:var(--warm-white);border:1.5px solid var(--border);border-radius:20px;
+    padding:6px 14px;font-size:13px;display:flex;align-items:center;gap:6px;}
+  .summary-pill strong{color:var(--saffron);}
+
+  /* BACK BTN */
+  .back-btn{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-size:13px;
+    cursor:pointer;border:none;background:none;padding:0 0 16px;font-family:'DM Sans',sans-serif;}
+  .back-btn:hover{color:var(--saffron);}
+
+  /* REPORT TABLE */
+  .report-outer{overflow-x:auto;border-radius:var(--radius);border:1.5px solid #999;background:#fff;}
+  .rtbl{border-collapse:collapse;font-size:12px;white-space:nowrap;}
+  .rtbl th,.rtbl td{border:1px solid #bbb;padding:5px 8px;text-align:center;}
+  .rth-title{background:#2E7D32;color:#fff;font-size:13px;font-weight:700;padding:9px 12px;}
+  .rth-br{background:#1B5E20;color:#fff;font-weight:700;font-size:12px;}
+  .rg0,.rg1,.rg2{background:#7C5CBF;color:#fff;font-weight:700;}
+  .rg3{background:#8DB43E;color:#fff;font-weight:700;}
+  .rg4{background:#888844;color:#fff;font-weight:700;}
+  .rg5,.rg6,.rg7{background:#43A047;color:#fff;font-weight:700;}
+  .rsg0,.rsg1,.rsg2{background:#D1C4E9;color:#311B92;}
+  .rsg3{background:#DCEDC8;color:#1B5E20;}
+  .rsg4{background:#E8E8BB;color:#333300;}
+  .rsg5,.rsg6,.rsg7{background:#C8E6C9;color:#1B5E20;}
+  .rdc0,.rdc1,.rdc2{background:#EDE7F6;}
+  .rdc3{background:#F1F8E9;}
+  .rdc4{background:#F5F5E8;}
+  .rdc5,.rdc6,.rdc7{background:#E8F5E9;}
+  .rdcbr{background:#E8F5E9;font-weight:700;text-align:left;padding-left:10px;color:#1B5E20;}
+  .rdctot{background:#FFF3E0 !important;font-weight:700;color:#E65100 !important;}
+  .rhi{color:#1B5E20;font-weight:700;}
+  .rmd{color:#E65100;font-weight:700;}
+  .rlo{color:#C62828;font-weight:700;}
+
+  /* BULK IMPORT */
+  .bulk-modal{max-width:780px !important;}
+  .bulk-steps{display:flex;margin-bottom:24px;border-radius:10px;overflow:hidden;border:1.5px solid var(--border);}
+  .bulk-step{flex:1;padding:10px 14px;text-align:center;font-size:12px;font-weight:600;
+    background:var(--light-amber);color:var(--muted);transition:all .2s;}
+  .bulk-step.active{background:var(--saffron);color:#fff;}
+  .bulk-step.done{background:#E8F5E9;color:#2E7D32;}
+  .drop-zone{border:2.5px dashed var(--border);border-radius:12px;padding:36px 20px;
+    text-align:center;cursor:pointer;transition:all .25s;background:var(--warm-white);}
+  .drop-zone:hover,.drop-zone.drag{border-color:var(--amber);background:var(--light-amber);}
+  .drop-zone-icon{font-size:42px;margin-bottom:10px;}
+  .drop-zone p{color:var(--muted);font-size:14px;margin-bottom:6px;}
+  .drop-zone small{font-size:12px;color:var(--muted);opacity:.7;}
+  .bulk-preview{max-height:340px;overflow-y:auto;border-radius:10px;border:1.5px solid var(--border);}
+  .bulk-preview table{font-size:12px;}
+  .bulk-preview th{font-size:11px;padding:8px 10px;}
+  .bulk-preview td{padding:7px 10px;}
+  .bulk-preview .row-ok td{background:#F1F8E9;}
+  .bulk-preview .row-err td{background:#FFEBEE;}
+  .bulk-summary{display:flex;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
+  .bulk-pill{padding:6px 14px;border-radius:20px;font-size:13px;font-weight:600;}
+  .bulk-pill-ok{background:#E8F5E9;color:#2E7D32;}
+  .bulk-pill-err{background:#FFEBEE;color:#C62828;}
+  .bulk-pill-tot{background:var(--light-amber);color:var(--saffron);}
+  .tmpl-fields{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;}
+  .tmpl-field{background:var(--light-amber);border:1px solid var(--border);border-radius:6px;
+    padding:3px 10px;font-size:12px;color:var(--mid);}
+  .tmpl-field.req{background:#FFF3E0;border-color:#FFB300;color:var(--saffron);}
+
+  @media(max-width:700px){
+    .form-grid,.stg-grid{grid-template-columns:1fr;}
+    .form-group.full{grid-column:1;}
+    .header-stats{display:none;}
+    .main{padding:16px 12px;}
+    .dsb-wrap{grid-template-columns:1fr;}
+  }
+
+  /* MULTI SELECT */
+  .cb-wrap{display:flex;align-items:center;justify-content:center;}
+  .cb-row{width:17px;height:17px;cursor:pointer;accent-color:var(--saffron);}
+  .sel-bar{display:none;align-items:center;justify-content:space-between;
+    background:linear-gradient(135deg,#3E1F00,#6D3A00);
+    border-radius:10px;padding:10px 18px;margin-bottom:14px;flex-wrap:wrap;gap:10px;}
+  .sel-bar.show{display:flex;}
+  .sel-bar-left{display:flex;align-items:center;gap:10px;color:#FFE082;}
+  .sel-bar-left span{font-size:13px;font-weight:600;}
+  .sel-bar-right{display:flex;gap:8px;}
+  .btn-del-sel{background:#C62828;color:#fff;border:none;border-radius:8px;
+    padding:7px 16px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;
+    cursor:pointer;display:flex;align-items:center;gap:6px;transition:all .2s;}
+  .btn-del-sel:hover{background:#991b1b;}
+  .btn-clr-sel{background:rgba(255,255,255,0.12);color:#FFE082;border:1px solid rgba(255,224,130,0.3);
+    border-radius:8px;padding:7px 14px;font-family:'DM Sans',sans-serif;font-size:13px;
+    font-weight:500;cursor:pointer;transition:all .2s;}
+  .btn-clr-sel:hover{background:rgba(255,255,255,0.2);}
+  tr.selected td{background:#FFF3E0 !important;}
+
+
+  /* ── CHARTS ── */
+  .charts-section{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:24px;}
+  .chart-card{background:var(--warm-white);border:1.5px solid var(--border);border-radius:var(--radius);
+    padding:22px 24px;box-shadow:0 2px 12px rgba(230,81,0,0.07);}
+  .chart-card-title{font-family:'Playfair Display',serif;font-size:16px;font-weight:600;
+    color:var(--deep);margin-bottom:4px;}
+  .chart-card-sub{font-size:12px;color:var(--muted);margin-bottom:16px;}
+  .svg-chart{width:100%;overflow:visible;}
+  .chart-bar{transition:opacity .2s;cursor:pointer;}
+  .chart-bar:hover{opacity:.82;}
+  /* Progress list */
+  .prog-list{display:flex;flex-direction:column;gap:11px;}
+  .prog-item{display:flex;align-items:center;gap:9px;}
+  .prog-icon{font-size:15px;width:22px;text-align:center;flex-shrink:0;}
+  .prog-label{font-size:12px;color:var(--deep);font-weight:500;width:70px;flex-shrink:0;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .prog-track{flex:1;height:10px;background:var(--border);border-radius:5px;overflow:hidden;}
+  .prog-fill{height:100%;border-radius:5px;transition:width .8s cubic-bezier(.4,0,.2,1);}
+  .prog-cnt{font-size:12px;font-weight:700;color:var(--deep);width:26px;text-align:right;flex-shrink:0;}
+  .prog-pct{font-size:11px;color:var(--muted);width:32px;text-align:right;flex-shrink:0;}
+  @media(max-width:700px){.charts-section{grid-template-columns:1fr;}}
+
+
+  /* ── MASTER LIST ── */
+  .ml-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+  .ml-stat{background:var(--warm-white);border:1.5px solid var(--border);border-radius:10px;
+    padding:14px 16px;text-align:center;box-shadow:0 2px 8px rgba(230,81,0,0.06);}
+  .ml-stat-num{font-size:26px;font-weight:700;color:var(--saffron);line-height:1;}
+  .ml-stat-lbl{font-size:11px;color:var(--muted);margin-top:4px;}
+  .mod-tag{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:12px;
+    font-size:11px;font-weight:500;margin:2px;white-space:nowrap;}
+  .alumni-row-expand{display:none;background:#FFF8F0;}
+  .alumni-row-expand.open{display:table-row;}
+  .expand-cell{padding:10px 14px 14px 44px;border-top:none!important;}
+  .expand-mods{display:flex;flex-wrap:wrap;gap:8px;}
+  .expand-mod-card{background:var(--warm-white);border:1.5px solid var(--border);border-radius:8px;
+    padding:8px 12px;font-size:12px;min-width:140px;}
+  .expand-mod-title{font-weight:600;color:var(--deep);margin-bottom:4px;font-size:12px;}
+  .expand-mod-detail{color:var(--muted);font-size:11px;line-height:1.6;}
+  .ml-search-bar{display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;}
+  @media(max-width:700px){.ml-stats{grid-template-columns:1fr 1fr;}}
+
+
+  
+/* ── BAR COLOR BY VALUE ── */
+// val = actual count, target = module target for active quarter
+function barColor(val, target){
+  if(!target||target===0)return'#9E9E9E';
+  const pct=(val/target)*100;
+  if(pct>=100)return'#2E7D32';  // Green - target achieved/exceeded
+  if(pct>=50)return'#E65100';   // Orange - 50-99% of target
+  return'#C62828';              // Red - below 50% of target
+}
+function barColorLight(val, target){
+  if(!target||target===0)return'#F5F5F5';
+  const pct=(val/target)*100;
+  if(pct>=100)return'#E8F5E9';
+  if(pct>=50)return'#FFF3E0';
+  return'#FFEBEE';
+}
+
+/* ── DARK MODE ── */
+  body.dark{
+    --cream:#1A1208;--warm-white:#1E1810;--deep:#FFE0B2;--mid:#FFCC80;
+    --light-amber:#2A1F0E;--border:#3D2E18;--muted:#BF8A52;
+    --saffron:#FF7043;--amber:#FFA726;
+  }
+  body.dark .header{background:linear-gradient(135deg,#BF360C 0%,#8D1F00 60%,#6D1600 100%);}
+  body.dark .nav{background:#8D1F00;}
+  body.dark .dash-card{background:#1E1810;color:#FFE0B2;}
+  body.dark .dash-card h3{color:#FFE0B2;}
+  body.dark .table-wrap{background:#1E1810;}
+  body.dark th{background:#2A1F0E;color:#FFCC80;}
+  body.dark td{color:#FFE0B2;}
+  body.dark tr:hover td{background:#2A1F0E;}
+  body.dark .modal{background:#1E1810;}
+  body.dark .modal h3{color:#FFE0B2;}
+  body.dark .form-control{background:#2A1F0E;color:#FFE0B2;border-color:#3D2E18;}
+  body.dark .form-control:focus{border-color:var(--amber);}
+  body.dark .form-group label{color:#BF8A52;}
+  body.dark .search-input{background:#1E1810;color:#FFE0B2;}
+  body.dark .filter-select{background:#1E1810;color:#FFE0B2;}
+  body.dark .btn-secondary{background:#2A1F0E;color:#FFE0B2;border-color:#3D2E18;}
+  body.dark .btn-secondary:hover{background:#3D2E18;}
+  body.dark .summary-pill{background:#1E1810;border-color:#3D2E18;}
+  body.dark .chart-card{background:#1E1810;}
+  body.dark .chart-card-title{color:#FFE0B2;}
+  body.dark .prog-label{color:#FFE0B2;}
+  body.dark .prog-track{background:#3D2E18;}
+  body.dark .ml-stat{background:#1E1810;}
+  body.dark .ml-stat-lbl{color:#BF8A52;}
+  body.dark .expand-mod-card{background:#1E1810;border-color:#3D2E18;}
+  body.dark .expand-mod-title{color:#FFE0B2;}
+  body.dark .expand-mod-detail{color:#BF8A52;}
+  body.dark .alumni-row-expand{background:#2A1F0E;}
+  body.dark .dsb-stat-card{background:#1E1810;border-color:#3D2E18;}
+  body.dark .dsb-stat-num{color:#FFE0B2;}
+  body.dark .sel-bar{background:linear-gradient(135deg,#2A1F0E,#1A1208);}
+  /* ── DARK MODE REPORT TABLE ── */
+  body.dark .report-outer{background:#1E1810;border-color:#3D2E18;}
+  body.dark .rtbl th, body.dark .rtbl td{border-color:#3D2E18;}
+  body.dark .rth-title{background:#1C3A2A;color:#A5D6A7;}
+  body.dark .rth-br{background:#0D2A1A;color:#A5D6A7;}
+  /* Group headers */
+  body.dark .rg0,body.dark .rg1,body.dark .rg2{background:#2D1F4A;color:#D1C4E9;}
+  body.dark .rg3{background:#1A2E0A;color:#DCEDC8;}
+  body.dark .rg4{background:#2A2A0A;color:#F0F0BB;}
+  body.dark .rg5,body.dark .rg6,body.dark .rg7{background:#0A2A1A;color:#B2DFDB;}
+  /* Sub headers */
+  body.dark .rsg0,body.dark .rsg1,body.dark .rsg2{background:#1E1630;color:#B39DDB;}
+  body.dark .rsg3{background:#162210;color:#AED581;}
+  body.dark .rsg4{background:#22220A;color:#DCE775;}
+  body.dark .rsg5,body.dark .rsg6,body.dark .rsg7{background:#0A1E18;color:#80CBC4;}
+  /* Data cells */
+  body.dark .rdc0,body.dark .rdc1,body.dark .rdc2{background:#16102A;color:#D1C4E9;}
+  body.dark .rdc3{background:#101A08;color:#DCEDC8;}
+  body.dark .rdc4{background:#1A1A08;color:#F0F0BB;}
+  body.dark .rdc5,body.dark .rdc6,body.dark .rdc7{background:#081A10;color:#B2DFDB;}
+  body.dark .rdcbr{background:#0D2A1A;color:#A5D6A7;font-weight:700;}
+  body.dark .rdctot{background:#2A1A08 !important;color:#FFB300 !important;font-weight:700;}
+  /* Reached % colors */
+  body.dark .rhi{color:#69F0AE;font-weight:700;}
+  body.dark .rmd{color:#FFD54F;font-weight:700;}
+  body.dark .rlo{color:#FF5252;font-weight:700;}
+  /* Target column numbers */
+  body.dark .rtbl td{color:#E0E0E0;}
+
+  body.dark .module-title h2{color:#FFE0B2;}
+  body.dark .module-title p{color:#BF8A52;}
+  body.dark .back-btn{color:#BF8A52;}
+  body.dark .back-btn:hover{color:var(--saffron);}
+
+  /* Dark toggle button */
+  .dark-toggle{
+    display:flex;align-items:center;gap:8px;background:rgba(255,255,255,0.12);
+    border:1.5px solid rgba(255,255,255,0.2);border-radius:20px;
+    padding:5px 12px;cursor:pointer;transition:all .2s;color:#fff;
+    font-family:'DM Sans',sans-serif;font-size:12px;font-weight:500;
+  }
+  .dark-toggle:hover{background:rgba(255,255,255,0.2);}
+  .toggle-track{width:32px;height:18px;background:rgba(255,255,255,0.25);
+    border-radius:9px;position:relative;transition:background .3s;flex-shrink:0;}
+  .toggle-thumb{width:14px;height:14px;background:#fff;border-radius:50%;
+    position:absolute;top:2px;left:2px;transition:transform .3s;box-shadow:0 1px 4px rgba(0,0,0,0.3);}
+  body.dark .toggle-track{background:rgba(255,179,0,0.4);}
+  body.dark .toggle-thumb{transform:translateX(14px);background:#FFB300;}
+
+
+  /* ── DATE RANGE FILTER ── */
+  .date-filter-bar{display:flex;align-items:center;gap:10px;margin-bottom:14px;
+    flex-wrap:wrap;background:var(--warm-white);border:1.5px solid var(--border);
+    border-radius:10px;padding:10px 14px;}
+  .date-filter-label{font-size:12px;font-weight:600;color:var(--muted);
+    text-transform:uppercase;letter-spacing:.5px;white-space:nowrap;}
+  .date-input{padding:7px 11px;border:1.5px solid var(--border);border-radius:7px;
+    font-family:'DM Sans',sans-serif;font-size:13px;background:var(--warm-white);
+    color:var(--deep);outline:none;cursor:pointer;transition:border-color .2s;}
+  .date-input:focus{border-color:var(--amber);}
+  .date-sep{color:var(--muted);font-size:13px;}
+  .date-active{background:var(--light-amber);border-color:var(--amber);}
+  .date-result-badge{background:var(--light-amber);color:var(--saffron);
+    border:1px solid var(--border);border-radius:6px;padding:3px 10px;
+    font-size:12px;font-weight:600;white-space:nowrap;}
+  body.dark .date-filter-bar{background:#1E1810;border-color:#3D2E18;}
+  body.dark .date-input{background:#2A1F0E;color:#FFE0B2;border-color:#3D2E18;}
+  body.dark .date-input:focus{border-color:var(--amber);}
+
+
+  /* ── BRANCH WISE CHART ── */
+  .bw-tabs{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:14px;}
+  .bw-tab{padding:4px 10px;border-radius:20px;font-size:11px;font-weight:600;
+    cursor:pointer;border:1.5px solid var(--border);background:var(--warm-white);
+    color:var(--muted);transition:all .2s;white-space:nowrap;}
+  .bw-tab:hover{border-color:var(--amber);color:var(--deep);}
+  .bw-tab.active{color:#fff;border-color:transparent;}
+  .bw-list{display:flex;flex-direction:column;gap:7px;max-height:220px;overflow-y:auto;
+    scrollbar-width:thin;scrollbar-color:var(--border) transparent;padding-right:4px;}
+  .bw-list::-webkit-scrollbar{width:4px;}
+  .bw-list::-webkit-scrollbar-track{background:transparent;}
+  .bw-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px;}
+  .bw-row{display:flex;align-items:center;gap:8px;}
+  .bw-branch{font-size:11px;font-weight:600;color:var(--deep);width:60px;
+    flex-shrink:0;text-align:right;}
+  .bw-track{flex:1;height:10px;background:var(--border);border-radius:5px;overflow:hidden;}
+  .bw-fill{height:100%;border-radius:5px;transition:width .6s cubic-bezier(.4,0,.2,1);}
+  .bw-count{font-size:11px;font-weight:700;width:24px;text-align:right;flex-shrink:0;}
+  .bw-empty{font-size:12px;color:var(--muted);text-align:center;padding:20px 0;}
+  body.dark .bw-tab{background:#1E1810;border-color:#3D2E18;color:#BF8A52;}
+  body.dark .bw-tab:hover{border-color:var(--amber);color:#FFE0B2;}
+  body.dark .bw-branch{color:#FFE0B2;}
+  body.dark .bw-track{background:#3D2E18;}
+  body.dark .bw-count{color:#FFE0B2;}
+
+
+  .stg-qt-btn{padding:6px 16px;border-radius:20px;border:1.5px solid var(--border);
+    background:var(--warm-white);color:var(--muted);font-family:'DM Sans',sans-serif;
+    font-size:13px;font-weight:600;cursor:pointer;transition:all .2s;}
+  .stg-qt-btn:hover{border-color:var(--amber);color:var(--deep);}
+  .stg-qt-btn.active{background:var(--saffron);color:#fff;border-color:var(--saffron);}
+  body.dark .stg-qt-btn{background:#1E1810;border-color:#3D2E18;color:#BF8A52;}
+  body.dark .stg-qt-btn.active{background:var(--saffron);color:#fff;border-color:var(--saffron);}
+
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <div class="logo">
+      <div class="logo-icon">🙏</div>
+      <div class="logo-text">
+        <h1>Alumni Sevak CRM</h1>
+        <p>Alumni Coordinator Dashboard</p>
+      </div>
+    </div>
+    <div style="display:flex;align-items:center;gap:16px;">
+      <button class="dark-toggle" onclick="toggleDark()" id="darkBtn" title="Toggle Dark Mode">
+        <span id="darkIcon">🌙</span>
+        <div class="toggle-track"><div class="toggle-thumb" id="toggleThumb"></div></div>
+      </button>
+      <div class="header-stats" id="headerStats"></div>
+    </div>
+  </div>
+  <div class="nav"><div class="nav-inner" id="navInner"></div></div>
+</div>
+
+<div class="main" id="mainContent"></div>
+
+<!-- Entry Modal -->
+<div class="modal-bg" id="modalBg">
+  <div class="modal">
+    <h3 id="modalTitle">Add Entry</h3>
+    <div id="modalForm"></div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEntry()">💾 Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Settings Modal -->
+<div class="modal-bg" id="settingsBg">
+  <div class="modal settings-modal">
+    <h3>⚙️ Settings & Configuration</h3>
+    <div class="form-group full" style="margin-bottom:4px">
+      <label>Quarter / Report Title</label>
+      <input class="form-control" id="sTitleInput" placeholder="e.g. Quarter - 4 (Achieve Anyone - Alumni)"/>
+    </div>
+    <div class="stg-section">🎯 Quarter Targets</div>
+    <div style="display:flex;gap:6px;margin-bottom:12px;flex-wrap:wrap;" id="qtTabRow">
+      <button class="stg-qt-btn active" id="qtbQ1" onclick="switchQtTab('Q1')">Q1</button>
+      <button class="stg-qt-btn" id="qtbQ2" onclick="switchQtTab('Q2')">Q2</button>
+      <button class="stg-qt-btn" id="qtbQ3" onclick="switchQtTab('Q3')">Q3</button>
+      <button class="stg-qt-btn" id="qtbQ4" onclick="switchQtTab('Q4')">Q4</button>
+      <div style="margin-left:auto;display:flex;align-items:center;gap:8px;">
+        <span style="font-size:12px;color:var(--muted);">Active:</span>
+        <select class="form-control" id="activeQtSelect" style="width:70px;padding:5px 8px;font-size:13px;">
+          <option value="Q1">Q1</option>
+          <option value="Q2">Q2</option>
+          <option value="Q3">Q3</option>
+          <option value="Q4">Q4</option>
+        </select>
+      </div>
+    </div>
+    <div id="qtActiveLabel" style="font-size:11px;color:var(--saffron);margin-bottom:10px;font-weight:600;"></div>
+    <div class="stg-grid" id="targetsGrid"></div>
+    <div class="stg-section">🏢 Branch Management</div>
+    <div style="display:flex;gap:10px;margin-bottom:12px;">
+      <input class="form-control" id="newBranchInp" placeholder="Branch code e.g. BLR" style="flex:1"/>
+      <button class="btn btn-primary btn-sm" onclick="addBranch()">+ Add</button>
+    </div>
+    <div id="branchList" style="display:flex;flex-wrap:wrap;gap:8px;min-height:28px;"></div>
+    <div class="modal-actions">
+      <button class="btn btn-secondary" onclick="closeSettings()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveSettings()">💾 Save Settings</button>
+    </div>
+  </div>
+</div>
+
+<!-- Bulk Import Modal -->
+<div class="modal-bg" id="bulkBg">
+  <div class="modal bulk-modal">
+    <h3 id="bulkTitle">📥 Bulk Import Entries</h3>
+    <div class="bulk-steps" id="bulkSteps">
+      <div class="bulk-step active" id="bstep1">1. Download Template</div>
+      <div class="bulk-step" id="bstep2">2. Upload File</div>
+      <div class="bulk-step" id="bstep3">3. Preview & Confirm</div>
+    </div>
+    <div id="bulkBody"></div>
+    <div class="modal-actions" id="bulkActions"></div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   MODULES
+============================================================ */
+const MODULES = [
+  {
+    id:'getogether',label:'Alumni Get Together',short:'Get Together',icon:'🎊',color:'c0',
+    desc:'Manage reunion events & gatherings',defTarget:1,hasEvents:true,
+    fields:[
+      {k:'branch',l:'Branch',t:'brsel',req:true},
+      {k:'name',l:'Alumni Name',t:'text',req:true},
+      {k:'phone',l:'Phone Number',t:'text'},
+      {k:'city',l:'City',t:'text'},
+      {k:'batch',l:'Batch Year',t:'text'},
+      {k:'email',l:'Email',t:'email'},
+      {k:'eventName',l:'Event Name',t:'text'},
+      {k:'date',l:'Event Date',t:'date'},
+      {k:'venue',l:'Venue',t:'text'},
+      {k:'status',l:'Status',t:'sel',opts:['Attending','Not Attending','Maybe','Invited']},
+      {k:'notes',l:'Notes',t:'ta',full:true}
+    ],
+    cols:['branch','name','batch','phone','city','date','venue','status']
+  },
+  {
+    id:'visit',label:'Alumni Visit',short:'Alumni Visit',icon:'🚶',color:'c1',
+    desc:'Track alumni visits to campus / center',defTarget:20,
+    fields:[
+      {k:'branch',l:'Branch',t:'brsel',req:true},
+      {k:'name',l:'Alumni Name',t:'text',req:true},
+      {k:'phone',l:'Phone Number',t:'text'},
+      {k:'city',l:'City',t:'text'},
+      {k:'batch',l:'Batch Year',t:'text'},
+      {k:'visitDate',l:'Visit Date',t:'date'},
+      {k:'purpose',l:'Purpose of Visit',t:'text'},
+      {k:'status',l:'Status',t:'sel',opts:['Scheduled','Visited','Cancelled','Follow-up']},
+      {k:'hostedBy',l:'Hosted By',t:'text'},
+      {k:'notes',l:'Notes',t:'ta',full:true}
+    ],
+    cols:['branch','name','batch','phone','city','visitDate','purpose','status']
+  },
+  {
+    id:'padharamani',label:'Alumni Padharamani',short:'Padharamani',icon:'🏠',color:'c2',
+    desc:'Record home visit (padharamani) schedules',defTarget:5,
+    fields:[
+      {k:'branch',l:'Branch',t:'brsel',req:true},
+      {k:'name',l:'Alumni Name',t:'text',req:true},
+      {k:'phone',l:'Phone Number',t:'text'},
+      {k:'city',l:'City',t:'text'},
+      {k:'batch',l:'Batch Year',t:'text'},
+      {k:'address',l:'Address',t:'text'},
+      {k:'date',l:'Padharamani Date',t:'date'},
+      {k:'time',l:'Time',t:'time'},
+      {k:'saintName',l:'Saint / Person Visiting',t:'text'},
+      {k:'familyMembers',l:'Family Members',t:'text'},
+      {k:'status',l:'Status',t:'sel',opts:['Scheduled','Completed','Rescheduled','Cancelled']},
+      {k:'notes',l:'Notes',t:'ta',full:true}
+    ],
+    cols:['branch','name','batch','phone','city','date','saintName','status']
+  },
+  {
+    id:'seva',label:'Alumni Seva',short:'Seva',icon:'🤝',color:'c3',
+    desc:'Track seva activities by alumni',defTarget:10,
+    fields:[
+      {k:'branch',l:'Branch',t:'brsel',req:true},
+      {k:'name',l:'Alumni Name',t:'text',req:true},
+      {k:'phone',l:'Phone Number',t:'text'},
+      {k:'city',l:'City',t:'text'},
+      {k:'batch',l:'Batch Year',t:'text'},
+      {k:'sevaType',l:'Type of Seva',t:'text'},
+      {k:'date',l:'Date',t:'date'},
+      {k:'duration',l:'Duration (hrs)',t:'number'},
+      {k:'location',l:'Seva Location',t:'text'},
+      {k:'status',l:'Status',t:'sel',opts:['Completed','Scheduled','Ongoing','Cancelled']},
+      {k:'coordinator',l:'Coordinator',t:'text'},
+      {k:'notes',l:'Notes',t:'ta',full:true}
+    ],
+    cols:['branch','name','batch','phone','city','sevaType','date','status']
+  },
+  {
+    id:'bdaycalls',label:'Birthday Calls',short:"B'day Calls",icon:'📞',color:'c4',
+    desc:'Birthday call tracking for alumni',defTarget:50,
+    fields:[
+      {k:'branch',l:'Branch',t:'brsel',req:true},
+      {k:'name',l:'Alumni Name',t:'text',req:true},
+      {k:'phone',l:'Phone Number',t:'text'},
+      {k:'city',l:'City',t:'text'},
+      {k:'batch',l:'Batch Year',t:'text'},
+      {k:'birthday',l:'Birthday Date',t:'date'},
+      {k:'calledBy',l:'Called By',t:'text'},
+      {k:'callDate',l:'Call Date',t:'date'},
+      {k:'status',l:'Status',t:'sel',opts:['Called','Pending','No Answer','Rescheduled']},
+      {k:'response',l:'Response',t:'sel',opts:['Positive','Neutral','Not Reached','Voicemail']},
+      {k:'notes',l:'Notes',t:'ta',full:true}
+    ],
+    cols:['branch','name','batch','phone','city','birthday','calledBy','status']
+  },
+  {
+    id:'bdaygifts',label:'Birthday Gifts',short:"B'day Gifts",icon:'🎁',color:'c5',
+    desc:'Manage birthday gift sharing for alumni',defTarget:50,
+    fields:[
+      {k:'branch',l:'Branch',t:'brsel',req:true},
+      {k:'name',l:'Alumni Name',t:'text',req:true},
+      {k:'phone',l:'Phone Number',t:'text'},
+      {k:'city',l:'City',t:'text'},
+      {k:'batch',l:'Batch Year',t:'text'},
+      {k:'birthday',l:'Birthday Date',t:'date'},
+      {k:'giftType',l:'Gift Type',t:'text'},
+      {k:'amount',l:'Amount (₹)',t:'number'},
+      {k:'sharedBy',l:'Shared By',t:'text'},
+      {k:'deliveryDate',l:'Delivery Date',t:'date'},
+      {k:'status',l:'Status',t:'sel',opts:['Sent','Pending','Delivered','Returned']},
+      {k:'notes',l:'Notes',t:'ta',full:true}
+    ],
+    cols:['branch','name','batch','phone','city','birthday','giftType','amount','status']
+  },
+  {
+    id:'saintcalls',label:'Calls by Saints',short:'Saint Calls',icon:'☎️',color:'c6',
+    desc:'Calls made to alumni by Saints/Sadhus',defTarget:30,
+    fields:[
+      {k:'branch',l:'Branch',t:'brsel',req:true},
+      {k:'name',l:'Alumni Name',t:'text',req:true},
+      {k:'phone',l:'Phone Number',t:'text'},
+      {k:'city',l:'City',t:'text'},
+      {k:'batch',l:'Batch Year',t:'text'},
+      {k:'saintName',l:'Saint Name',t:'text'},
+      {k:'callDate',l:'Call Date',t:'date'},
+      {k:'duration',l:'Duration (mins)',t:'number'},
+      {k:'status',l:'Status',t:'sel',opts:['Completed','Scheduled','No Answer','Rescheduled']},
+      {k:'response',l:'Alumni Response',t:'sel',opts:['Very Positive','Positive','Neutral','Not Reached']},
+      {k:'followUp',l:'Follow-up Date',t:'date'},
+      {k:'notes',l:'Notes',t:'ta',full:true}
+    ],
+    cols:['branch','name','batch','phone','city','saintName','callDate','status']
+  }
+];
+
+const RCOLS=[
+  [{k:'alumni',l:'No of Alumni'},{k:'reached',l:'Reached'}],
+  [{k:'alumni',l:'No of Alumni'},{k:'target',l:'Target'},{k:'reached',l:'Reached'}],
+  [{k:'alumni',l:'No of Alumni'},{k:'reached',l:'Reached'}],
+  [{k:'alumni',l:'No of Alumni'},{k:'target',l:'Target'},{k:'reached',l:'Reached'}],
+  [{k:'alumni',l:'No of Alumni'},{k:'target',l:'Target'},{k:'reached',l:'Reached'}],
+  [{k:'alumni',l:'No of Alumni'},{k:'target',l:'Target'},{k:'reached',l:'Reached'}],
+  [{k:'alumni',l:'No of Alumni'},{k:'target',l:'Target'},{k:'reached',l:'Reached'}]
+];
+const RCLS=['rg0','rg1','rg2','rg3','rg4','rg5','rg6'];
+const RSCLS=['rsg0','rsg1','rsg2','rsg3','rsg4','rsg5','rsg6'];
+const RDCLS=['rdc0','rdc1','rdc2','rdc3','rdc4','rdc5','rdc6'];
+
+/* ============================================================
+   STATE & STORAGE
+============================================================ */
+let curMod=null,editId=null,srch='',fltSt='',dateFrom='',dateTo='',bulkRows=[],bulkStep=1,selIds=new Set();
+
+function gd(id){try{return JSON.parse(localStorage.getItem('acrm_'+id)||'[]');}catch{return[];}}
+function sd(id,d){localStorage.setItem('acrm_'+id,JSON.stringify(d));}
+function uid(){return Date.now().toString(36)+Math.random().toString(36).slice(2);}
+function gst(){try{return JSON.parse(localStorage.getItem('acrm_settings')||'{}');}catch{return{};}}
+function sst(s){localStorage.setItem('acrm_settings',JSON.stringify(s));}
+function gtgt(mid){
+  const s=gst();const m=MODULES.find(x=>x.id===mid);
+  const aq=s.activeQuarter||'Q1';
+  const qtTargets=s.quarters&&s.quarters[aq];
+  if(qtTargets&&qtTargets[mid]!=null)return Number(qtTargets[mid]);
+  if(s.tg&&s.tg[mid]!=null)return Number(s.tg[mid]);
+  return m?m.defTarget:10;
+}
+function gActiveQuarter(){return(gst().activeQuarter||'Q1');}
+function gqtitle(){return gst().qTitle||'Quarter - 4 (Achieve Anyone - Alumni)';}
+function gbranches(){
+  const s=gst();const mb=s.branches||[];
+  const ab=new Set();MODULES.forEach(m=>gd(m.id).forEach(r=>{if(r.branch)ab.add(r.branch);}));
+  return[...new Set([...mb,...ab])].sort();
+}
+function gtotal(){return MODULES.reduce((s,m)=>s+gd(m.id).length,0);}
+
+function sbadge(v){
+  if(!v)return'';const s=v.toLowerCase();let c='badge-neutral';
+  if(['completed','attending','visited','called','sent','delivered','very positive','participated'].some(x=>s.includes(x)))c='badge-success';
+  else if(['pending','scheduled','invited','ongoing','registered'].some(x=>s.includes(x)))c='badge-warning';
+  else if(['cancelled','not attending','returned','no answer','absent'].some(x=>s.includes(x)))c='badge-danger';
+  else if(['maybe','rescheduled','follow-up','positive'].some(x=>s.includes(x)))c='badge-info';
+  else if(['neutral','voicemail'].some(x=>s.includes(x)))c='badge-purple';
+  return`<span class="badge ${c}">${v}</span>`;
+}
+
+/* ============================================================
+   NAV & HEADER
+============================================================ */
+function rnav(){
+  let h='<button class="nav-btn'+(curMod===null?' active':'')+'" onclick="showDash()">🏠 Dashboard</button>';
+  MODULES.forEach(m=>{
+    h+=`<button class="nav-btn${curMod===m.id?' active':''}" onclick="showMod('${m.id}')">
+      ${m.icon} ${m.label}<span class="nav-num">${gd(m.id).length}</span></button>`;
+  });
+  h+='<button class="nav-btn'+(curMod==='report'?' active':'')+'" onclick="showReport()">📊 Report Table</button>';
+  h+='<button class="nav-btn'+(curMod==="masterlist"?' active':'')+'" onclick="showMasterList()">👥 Alumni Master List</button>';
+  document.getElementById('navInner').innerHTML=h;
+}
+function rhdr(){
+  const today=new Date().toISOString().split('T')[0];
+  let bd=0;['bdaycalls','bdaygifts'].forEach(id=>gd(id).forEach(r=>{if(r.birthday===today)bd++;}));
+  document.getElementById('headerStats').innerHTML=`
+    <div class="hstat"><div class="hstat-num">${gtotal()}</div><div class="hstat-lbl">Total Records</div></div>
+    <div class="hstat"><div class="hstat-num">${gbranches().length}</div><div class="hstat-lbl">Branches</div></div>
+    ${bd?`<div class="hstat"><div class="hstat-num">🎂${bd}</div><div class="hstat-lbl">Bday Today</div></div>`:''}`;
+}
+
+
+/* ============================================================
+   ALUMNI MASTER LIST
+============================================================ */
+function showMasterList(){
+  curMod='masterlist'; srch=''; fltSt=''; selIds=new Set();
+  rnav(); rhdr();
+  renderMasterList('','','');
+}
+
+
+function switchBWTab(idx){
+  const d=window._bwData;
+  const colors=window._barColors;
+  if(!d)return;
+  // Update tabs
+  document.querySelectorAll('.bw-tab').forEach((t,i)=>{
+    t.classList.toggle('active',i===idx);
+    t.style.background=i===idx?colors[i]:'';
+    t.style.color=i===idx?'#fff':'';
+    t.style.borderColor=i===idx?'transparent':'';
+  });
+  // Update list
+  const list=document.getElementById('bwList');
+  if(!list)return;
+  const item=d[idx];
+  if(!item||item.sorted.length===0){
+    list.innerHTML='<div class="bw-empty">No entries yet for this module</div>';return;
+  }
+  const maxB=item.sorted[0][1]||1;
+  list.innerHTML=item.sorted.map(([br,cnt])=>{
+    const modTgt=gtgt(item.mod.id);
+    const col=barColor(cnt,modTgt);
+    return`<div class="bw-row">
+      <div class="bw-branch">${br}</div>
+      <div class="bw-track">
+        <div class="bw-fill" style="width:${Math.round((cnt/maxB)*100)}%;background:${col};"></div>
+      </div>
+      <div class="bw-count" style="color:${col}">${cnt}</div>
+    </div>`;
+  }).join('');
+}
+function renderMasterList(q, brFilter, modFilter){
+  // Collect all alumni across all modules - group by phone (or name if no phone)
+  const alumniMap={};
+  MODULES.forEach(m=>{
+    gd(m.id).forEach(r=>{
+      const key=(r.phone&&r.phone.trim())?r.phone.trim():(r.name||'').trim().toLowerCase();
+      if(!key)return;
+      if(!alumniMap[key]){
+        alumniMap[key]={
+          name:r.name||'',phone:r.phone||'',city:r.city||'',
+          batch:r.batch||'',branch:r.branch||'',
+          modules:{},totalActivities:0
+        };
+      }
+      // Update with latest info
+      if(r.name)alumniMap[key].name=r.name;
+      if(r.phone)alumniMap[key].phone=r.phone;
+      if(r.city)alumniMap[key].city=r.city;
+      if(r.batch)alumniMap[key].batch=r.batch;
+      if(r.branch)alumniMap[key].branch=r.branch;
+      if(!alumniMap[key].modules[m.id])alumniMap[key].modules[m.id]=[];
+      alumniMap[key].modules[m.id].push(r);
+      alumniMap[key].totalActivities++;
+    });
+  });
+
+  let alumni=Object.values(alumniMap);
+
+  // Apply filters
+  if(q){
+    const ql=q.toLowerCase();
+    alumni=alumni.filter(a=>
+      a.name.toLowerCase().includes(ql)||
+      a.phone.includes(ql)||
+      a.city.toLowerCase().includes(ql)||
+      a.branch.toLowerCase().includes(ql)||
+      a.batch.toLowerCase().includes(ql)
+    );
+  }
+  if(brFilter) alumni=alumni.filter(a=>a.branch===brFilter);
+  if(modFilter) alumni=alumni.filter(a=>a.modules[modFilter]&&a.modules[modFilter].length>0);
+
+  alumni.sort((a,b)=>b.totalActivities-a.totalActivities);
+
+  const totalAlumni=Object.keys(alumniMap).length;
+  const totalActivities=Object.values(alumniMap).reduce((s,a)=>s+a.totalActivities,0);
+  const branches=[...new Set(Object.values(alumniMap).map(a=>a.branch).filter(Boolean))];
+  const multiMod=Object.values(alumniMap).filter(a=>Object.keys(a.modules).length>1).length;
+
+  const barColors={'getogether':'#E65100','visit':'#1565C0','padharamani':'#2E7D32',
+    'seva':'#6A1B9A','bdaycalls':'#00695C','bdaygifts':'#C62828','saintcalls':'#E65100'};
+  const bgColors={'getogether':'#FFF3E0','visit':'#E3F2FD','padharamani':'#E8F5E9',
+    'seva':'#F3E5F5','bdaycalls':'#E0F2F1','bdaygifts':'#FFEBEE','saintcalls':'#FFF3E0'};
+
+  const allBranches=[...new Set(gd('getogether').concat(gd('visit'),gd('padharamani'),
+    gd('seva'),gd('bdaycalls'),gd('bdaygifts'),gd('saintcalls'))
+    .map(r=>r.branch).filter(Boolean))].sort();
+
+  let h=`
+    <button class="back-btn" onclick="showDash()">← Back to Dashboard</button>
+    <div class="module-header">
+      <div class="module-title">
+        <div style="font-size:26px">👥</div>
+        <div><h2>Alumni Master List</h2>
+          <p>Combined alumni data from all modules · ${alumni.length} alumni shown</p></div>
+      </div>
+    </div>
+    <div class="ml-stats">
+      <div class="ml-stat"><div class="ml-stat-num">${totalAlumni}</div><div class="ml-stat-lbl">Total Unique Alumni</div></div>
+      <div class="ml-stat"><div class="ml-stat-num">${totalActivities}</div><div class="ml-stat-lbl">Total Activities</div></div>
+      <div class="ml-stat"><div class="ml-stat-num">${branches.length}</div><div class="ml-stat-lbl">Branches Covered</div></div>
+      <div class="ml-stat"><div class="ml-stat-num">${multiMod}</div><div class="ml-stat-lbl">Multi-Module Alumni</div></div>
+    </div>
+    <div class="ml-search-bar">
+      <input class="search-input" style="flex:1;min-width:200px" placeholder="🔍 Search by name, phone, city, branch, batch..."
+        value="${q}" oninput="renderMasterList(this.value,'${brFilter}','${modFilter}')"/>
+      <select class="filter-select" onchange="renderMasterList('${q}',this.value,'${modFilter}')">
+        <option value="">All Branches</option>
+        ${allBranches.map(b=>`<option value="${b}"${brFilter===b?' selected':''}>${b}</option>`).join('')}
+      </select>
+      <select class="filter-select" onchange="renderMasterList('${q}','${brFilter}',this.value)">
+        <option value="">All Modules</option>
+        ${MODULES.map(m=>`<option value="${m.id}"${modFilter===m.id?' selected':''}>${m.icon} ${m.short}</option>`).join('')}
+      </select>
+      ${(q||brFilter||modFilter)?`<button class="btn btn-secondary btn-sm" onclick="renderMasterList('','','')">Clear ✕</button>`:''}
+    </div>`;
+
+  if(alumni.length===0){
+    h+=`<div class="table-wrap"><div class="empty"><div class="empty-icon">👥</div>
+      <p>${totalAlumni?'No alumni match your search.':'No alumni data yet. Add entries in any module to see them here.'}</p>
+    </div></div>`;
+  } else {
+    h+=`<div class="table-wrap"><table><thead><tr>
+      <th style="width:32px"></th>
+      <th>Alumni Name</th>
+      <th>Branch</th>
+      <th>Batch</th>
+      <th>Phone</th>
+      <th>City</th>
+      <th>Modules</th>
+      <th style="text-align:center">Activities</th>
+    </tr></thead><tbody>`;
+
+    alumni.forEach((a,idx)=>{
+      const modKeys=Object.keys(a.modules);
+      const modTags=modKeys.map(mid=>{
+        const m=MODULES.find(x=>x.id===mid);
+        if(!m)return'';
+        return`<span class="mod-tag" style="background:${bgColors[mid]||'#F5F5F5'};color:${barColors[mid]||'#666'}">${m.icon} ${m.short}</span>`;
+      }).join('');
+
+      h+=`<tr style="cursor:pointer" onclick="toggleAlumniRow('arow_${idx}')">
+        <td style="color:var(--muted);font-size:12px;text-align:center">▶</td>
+        <td><strong>${a.name||'—'}</strong></td>
+        <td>${a.branch?`<span class="badge badge-info">${a.branch}</span>`:'—'}</td>
+        <td>${a.batch?`<span class="badge badge-neutral">${a.batch}</span>`:'—'}</td>
+        <td style="color:var(--muted)">${a.phone||'—'}</td>
+        <td>${a.city||'—'}</td>
+        <td>${modTags}</td>
+        <td style="text-align:center"><strong style="color:var(--saffron)">${a.totalActivities}</strong></td>
+      </tr>
+      <tr class="alumni-row-expand" id="arow_${idx}">
+        <td class="expand-cell" colspan="8">
+          <div class="expand-mods">
+            ${modKeys.map(mid=>{
+              const m=MODULES.find(x=>x.id===mid);
+              if(!m)return'';
+              const entries=a.modules[mid];
+              return entries.map(e=>`
+                <div class="expand-mod-card">
+                  <div class="expand-mod-title">${m.icon} ${m.label}</div>
+                  <div class="expand-mod-detail">
+                    ${e.status?`Status: <strong>${e.status}</strong><br/>`:''}
+                    ${e.date||e.visitDate||e.callDate||e.birthday?`Date: ${e.date||e.visitDate||e.callDate||e.birthday}<br/>`:''}
+                    ${e.sevaType?`Seva: ${e.sevaType}<br/>`:''}
+                    ${e.saintName?`Saint: ${e.saintName}<br/>`:''}
+                    ${e.venue?`Venue: ${e.venue}<br/>`:''}
+                    ${e.giftType?`Gift: ${e.giftType}<br/>`:''}
+                    ${e.amount?`Amount: ₹${Number(e.amount).toLocaleString('en-IN')}<br/>`:''}
+                    ${e.notes?`Notes: ${e.notes}`:''}
+                  </div>
+                </div>`).join('');
+            }).join('')}
+          </div>
+        </td>
+      </tr>`;
+    });
+    h+=`</tbody></table></div>`;
+  }
+
+  document.getElementById('mainContent').innerHTML=h;
+}
+
+function toggleAlumniRow(id){
+  const row=document.getElementById(id);
+  if(!row)return;
+  const isOpen=row.classList.contains('open');
+  // Close all
+  document.querySelectorAll('.alumni-row-expand.open').forEach(r=>r.classList.remove('open'));
+  // Update arrows
+  document.querySelectorAll('tbody tr:not(.alumni-row-expand) td:first-child').forEach(td=>{
+    if(td.textContent.includes('▼'))td.textContent='▶';
+  });
+  if(!isOpen){
+    row.classList.add('open');
+    const prevTd=row.previousElementSibling?.querySelector('td:first-child');
+    if(prevTd)prevTd.textContent='▼';
+  }
+}
+
+
+/* ============================================================
+   DASHBOARD
+============================================================ */
+function showDash(){
+  curMod=null;rnav();rhdr();
+  const totalRec=gtotal(),branchCount=gbranches().length;
+  let h=`
+  <div class="dsb-wrap">
+    <div class="dsb-main">
+      <div class="dsb-main-top">
+        <div class="dsb-gear-wrap" onclick="openSettings()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#FFB300" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06
+              a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09
+              A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83
+              l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09
+              A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83
+              l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09
+              a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83
+              l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09
+              a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+        </div>
+        <span class="dsb-badge">⚙️ Configuration</span>
+      </div>
+      <div class="dsb-main-title">Settings & Targets</div>
+      <div class="dsb-main-sub">Manage branches · Set module targets · Customize quarter title</div>
+      <button class="dsb-main-btn" onclick="openSettings()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+        Open Settings
+      </button>
+    </div>
+    <div class="dsb-stats-col">
+      <div class="dsb-stat-card">
+        <div class="dsb-stat-icon" style="background:#FFF3E0;">📊</div>
+        <div><div class="dsb-stat-num">${totalRec}</div><div class="dsb-stat-lbl">Total Records Across All Modules</div></div>
+      </div>
+      <div class="dsb-stat-card">
+        <div class="dsb-stat-icon" style="background:#E3F2FD;">🏢</div>
+        <div><div class="dsb-stat-num">${branchCount}</div><div class="dsb-stat-lbl">Active Branches Registered</div></div>
+      </div>
+      <button class="dsb-report-btn" onclick="showReport()">
+        <div class="dsb-report-icon">📋</div>
+        <div>
+          <div class="dsb-report-title">📊 View Report Table</div>
+          <div class="dsb-report-sub">Branch-wise aggregated report · Download Excel / CSV</div>
+        </div>
+      </button>
+    </div>
+  </div>
+  <div class="dash-grid">`;
+  MODULES.forEach(m=>{
+    h+=`<div class="dash-card ${m.color}" onclick="showMod('${m.id}')">
+      <div class="dash-card-count">${gd(m.id).length}</div>
+      <div class="dash-card-icon">${m.icon}</div>
+      <h3>${m.label}</h3><p>${m.desc}</p></div>`;
+  });
+  h+=`<div class="dash-card cr" onclick="showReport()">
+    <div class="dash-card-count">📊</div>
+    <div class="dash-card-icon">📋</div>
+    <h3>Report Table</h3><p>Branch-wise auto-generated report — download as Excel CSV</p></div>
+  <div class="dash-card cm" onclick="showMasterList()">
+    
+    <div class="dash-card-count" style="font-size:16px;">👥</div>
+    <div class="dash-card-icon">🗂️</div>
+    <h3>Alumni Master List</h3>
+    <p>Combined alumni data from all modules in one place</p>
+  </div>
+  </div>`;
+  // ── CHARTS ──
+  const modCounts=MODULES.map(m=>gd(m.id).length);
+  const maxCount=Math.max(...modCounts,1);
+  const barColors=['#E65100','#1565C0','#2E7D32','#6A1B9A','#00695C','#C62828','#E65100'];
+  const totalAll=gtotal()||1;
+
+  // SVG Bar Chart
+  const svgW=560,svgH=220,padL=44,padR=12,padT=20,padB=52;
+  const chartW=svgW-padL-padR;
+  const chartH=svgH-padT-padB;
+  const n=MODULES.length;
+  const barW=Math.floor(chartW/n*0.58);
+  const barGap=Math.floor(chartW/n);
+
+  // Y-axis grid lines (5 steps)
+  const steps=5;
+  const stepVal=Math.ceil(maxCount/steps);
+  const niceMax=stepVal*steps;
+
+  let svgGrid='',svgBars='',svgXLabels='',svgYLabels='';
+
+  // Grid lines + Y labels
+  for(let i=0;i<=steps;i++){
+    const val=stepVal*i;
+    const y=padT+chartH-Math.round((val/niceMax)*chartH);
+    svgGrid+=`<line x1="${padL}" y1="${y}" x2="${svgW-padR}" y2="${y}"
+      stroke="${i===0?'#C8A97A':'#F0D9BC'}" stroke-width="${i===0?1.5:.8}" stroke-dasharray="${i===0?'':'4,3'}"/>`;
+    svgYLabels+=`<text x="${padL-7}" y="${y+4}" text-anchor="end" font-size="11"
+      fill="#9E6B3A" font-family="DM Sans,sans-serif">${val}</text>`;
+  }
+
+  // Bars
+  MODULES.forEach((m,i)=>{
+    const cnt=modCounts[i];
+    const barH=niceMax>0?Math.round((cnt/niceMax)*chartH):0;
+    const x=padL+i*barGap+(barGap-barW)/2;
+    const y=padT+chartH-barH;
+    const col=barColors[i];
+    const dynCol=barColor(cnt,gtgt(m.id));
+    // Bar shadow
+    svgBars+=`<rect x="${x+2}" y="${y+2}" width="${barW}" height="${Math.max(barH,0)}"
+      rx="5" fill="rgba(0,0,0,0.08)"/>`;
+    // Bar
+    svgBars+=`<rect class="chart-bar" x="${x}" y="${y}" width="${barW}" height="${Math.max(barH,1)}"
+      rx="5" fill="${dynCol}" onclick="showMod('${m.id}')">
+      <animate attributeName="height" from="0" to="${Math.max(barH,1)}" dur=".7s" fill="freeze"
+        calcMode="spline" keySplines="0.4 0 0.2 1"/>
+      <animate attributeName="y" from="${padT+chartH}" to="${y}" dur=".7s" fill="freeze"
+        calcMode="spline" keySplines="0.4 0 0.2 1"/>
+    </rect>`;
+    // Value on top
+    if(cnt>0){
+      svgBars+=`<text x="${x+barW/2}" y="${y-6}" text-anchor="middle" font-size="12"
+        font-weight="700" fill="${dynCol}" font-family="DM Sans,sans-serif">${cnt}</text>`;
+    }
+    // X label (icon + name)
+    const cx=padL+i*barGap+barGap/2;
+    svgXLabels+=`<text x="${cx}" y="${padT+chartH+18}" text-anchor="middle" font-size="14"
+      font-family="DM Sans,sans-serif">${m.icon}</text>`;
+    svgXLabels+=`<text x="${cx}" y="${padT+chartH+34}" text-anchor="middle" font-size="10"
+      fill="#9E6B3A" font-family="DM Sans,sans-serif"
+      style="cursor:pointer" onclick="showMod('${m.id}')">${m.short.split(' ')[0]}</text>`;
+  });
+
+  const svgChart=`<svg class="svg-chart" viewBox="0 0 ${svgW} ${svgH}" xmlns="http://www.w3.org/2000/svg">
+    ${svgGrid}${svgBars}${svgXLabels}${svgYLabels}
+  </svg>`;
+
+  // Branch-wise data for all modules
+  const branches=gbranches();
+  const bwData=MODULES.map((m,i)=>{
+    const entries=gd(m.id);
+    const branchCounts={};
+    entries.forEach(r=>{if(r.branch)branchCounts[r.branch]=(branchCounts[r.branch]||0)+1;});
+    const sorted=Object.entries(branchCounts).sort((a,b)=>b[1]-a[1]);
+    return{mod:m,color:barColors[i],sorted};
+  });
+
+  // Build branch-wise tabs + list (default: first module with data, else first module)
+  const bwDefaultIdx=bwData.findIndex(d=>d.sorted.length>0)||0;
+
+  const bwTabs=MODULES.map((m,i)=>`
+    <button class="bw-tab${i===bwDefaultIdx?' active':''}"
+      style="${i===bwDefaultIdx?'background:'+barColors[i]+';':''}"
+      onclick="switchBWTab(${i})" id="bwtab_${i}">${m.icon} ${m.short.split(' ')[0]}</button>`).join('');
+
+  function bwListHTML(idx){
+    const d=bwData[idx];
+    if(!d||d.sorted.length===0)
+      return'<div class="bw-empty">No entries yet for this module</div>';
+    const maxB=d.sorted[0][1]||1;
+    const modTarget=gtgt(d.mod.id);
+    return d.sorted.map(([br,cnt])=>{
+      const col=barColor(cnt,modTarget);
+      return`<div class="bw-row">
+        <div class="bw-branch">${br}</div>
+        <div class="bw-track">
+          <div class="bw-fill" style="width:${Math.round((cnt/maxB)*100)}%;background:${col};"></div>
+        </div>
+        <div class="bw-count" style="color:${col}">${cnt}</div>
+      </div>`;
+    }).join('');
+  }
+
+  // Store bwData in window for tab switching
+  window._bwData=bwData;
+  window._barColors=barColors;
+
+  h+=`<div class="charts-section">
+    <div class="chart-card">
+      <div class="chart-card-title">📊 Module-wise Record Count</div>
+      <div class="chart-card-sub">Click any bar to open module · Active: <strong>${gActiveQuarter()}</strong> · Target-based coloring</div>
+      <div style="display:flex;gap:12px;margin-bottom:8px;flex-wrap:wrap;">
+        <span style="font-size:11px;display:flex;align-items:center;gap:5px;color:var(--muted)">
+          <span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:#2E7D32"></span>Target Met (≥100%)
+        </span>
+        <span style="font-size:11px;display:flex;align-items:center;gap:5px;color:var(--muted)">
+          <span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:#E65100"></span>Partial (50–99%)
+        </span>
+        <span style="font-size:11px;display:flex;align-items:center;gap:5px;color:var(--muted)">
+          <span style="display:inline-block;width:12px;height:12px;border-radius:3px;background:#C62828"></span>Low (&lt;50%)
+        </span>
+      </div>
+      ${svgChart}
+    </div>
+    <div class="chart-card">
+      <div class="chart-card-title">🏢 Branch-wise Breakdown</div>
+      <div class="chart-card-sub">Select a module to see branch-wise entries</div>
+      <div style="display:flex;gap:10px;margin-bottom:8px;flex-wrap:wrap;">
+        <span style="font-size:11px;display:flex;align-items:center;gap:4px;color:var(--muted)">
+          <span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#2E7D32"></span>High
+        </span>
+        <span style="font-size:11px;display:flex;align-items:center;gap:4px;color:var(--muted)">
+          <span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#E65100"></span>Medium
+        </span>
+        <span style="font-size:11px;display:flex;align-items:center;gap:4px;color:var(--muted)">
+          <span style="display:inline-block;width:10px;height:10px;border-radius:2px;background:#C62828"></span>Low
+        </span>
+      </div>
+      <div class="bw-tabs">${bwTabs}</div>
+      <div class="bw-list" id="bwList">${bwListHTML(bwDefaultIdx)}</div>
+    </div>
+  </div>`;
+
+  let rec=[];
+  MODULES.forEach(m=>gd(m.id).forEach(r=>rec.push({...r,_ml:m.label,_mi:m.icon})));
+  rec.sort((a,b)=>(b._createdAt||0)-(a._createdAt||0));rec=rec.slice(0,12);
+  if(rec.length){
+    h+=`<div class="table-wrap"><div style="padding:16px 18px;border-bottom:1px solid var(--border);
+      font-family:'Playfair Display',serif;font-size:17px;font-weight:600;color:var(--deep);">📋 Recent Entries</div>
+      <table><thead><tr><th>Name</th><th>Branch</th><th>Batch</th><th>Module</th><th>Status</th><th>Phone</th></tr></thead><tbody>`;
+    rec.forEach(r=>{
+      h+=`<tr>
+        <td><strong>${r.name||'-'}</strong></td>
+        <td><span class="badge badge-neutral">${r.branch||'-'}</span></td>
+        <td><span class="badge badge-info">${r.batch||'-'}</span></td>
+        <td><span style="font-size:12px">${r._mi} ${r._ml}</span></td>
+        <td>${sbadge(r.status||r.response||'')}</td>
+        <td style="color:var(--muted)">${r.phone||'-'}</td></tr>`;
+    });
+    h+=`</tbody></table></div>`;
+  }
+  document.getElementById('mainContent').innerHTML=h;
+}
+
+/* ============================================================
+   MODULE VIEW
+============================================================ */
+function showMod(id){curMod=id;srch='';fltSt='';dateFrom='';dateTo='';selIds=new Set();rnav();rhdr();renderMod();}
+function renderMod(){
+  const m=MODULES.find(x=>x.id===curMod);
+  const data=gd(curMod);
+  // Date field mapping per module
+  const dateFieldMap={
+    getogether:'date',visit:'visitDate',padharamani:'date',
+    seva:'date',bdaycalls:'callDate',bdaygifts:'deliveryDate',saintcalls:'callDate'
+  };
+  const df=dateFieldMap[curMod]||'date';
+
+  let filt=data.filter(r=>{
+    if(srch){const q=srch.toLowerCase();
+      if(!Object.values(r).some(v=>v&&v.toString().toLowerCase().includes(q)))return false;}
+    if(fltSt&&(r.status||r.response||'')!==fltSt)return false;
+    if(dateFrom||dateTo){
+      const rDate=r[df]||r.date||r.birthday||'';
+      if(!rDate)return false;
+      if(dateFrom&&rDate<dateFrom)return false;
+      if(dateTo&&rDate>dateTo)return false;
+    }
+    return true;
+  });
+  const sts=[...new Set(data.map(r=>r.status||r.response||'').filter(Boolean))];
+  const sc={};data.forEach(r=>{const s=r.status||r.response||'—';sc[s]=(sc[s]||0)+1;});
+  const cols=(m.cols||['branch','name','phone']).map(k=>{
+    const f=m.fields.find(x=>x.k===k);return{key:k,label:f?f.l:k};
+  });
+  let h=`<button class="back-btn" onclick="showDash()">← Back to Dashboard</button>
+    <div class="module-header">
+      <div class="module-title">
+        <div style="font-size:26px">${m.icon}</div>
+        <div><h2>${m.label}</h2><p>${m.desc} · ${data.length} records · Target: ${gtgt(m.id)}</p></div>
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-info" onclick="openBulk()">📥 Bulk Import</button>
+        <button class="btn btn-primary" onclick="openModal()">+ Add Entry</button>
+      </div>
+    </div>
+    <div class="summary-row">
+      ${Object.entries(sc).map(([s,cnt])=>`<div class="summary-pill">${sbadge(s)} <strong>${cnt}</strong></div>`).join('')}
+    </div>
+    <div class="search-bar">
+      <input class="search-input" placeholder="🔍 Search by name, phone, branch, city..." value="${srch}"
+        oninput="srch=this.value;renderMod()"/>
+      ${sts.length?`<select class="filter-select" onchange="fltSt=this.value;renderMod()">
+        <option value="">All Status</option>
+        ${sts.map(s=>`<option value="${s}"${fltSt===s?' selected':''}>${s}</option>`).join('')}
+      </select>`:''}
+      ${filt.length!==data.length||dateFrom||dateTo?`<button class="btn btn-secondary btn-sm" onclick="fltSt='';srch='';dateFrom='';dateTo='';renderMod()">Clear All ✕</button>`:''}
+    </div>
+    <div class="date-filter-bar">
+      <span class="date-filter-label">📅 Date Range</span>
+      <input type="date" class="date-input${dateFrom?' date-active':''}" id="dfFrom"
+        value="${dateFrom}" title="From Date"
+        onchange="dateFrom=this.value;renderMod()"/>
+      <span class="date-sep">→</span>
+      <input type="date" class="date-input${dateTo?' date-active':''}" id="dfTo"
+        value="${dateTo}" title="To Date"
+        onchange="dateTo=this.value;renderMod()"/>
+      ${dateFrom||dateTo?`<span class="date-result-badge">${filt.length} result${filt.length===1?'':'s'}</span>`:''}
+      ${dateFrom||dateTo?`<button class="btn btn-secondary btn-sm" onclick="dateFrom='';dateTo='';document.getElementById('dfFrom').value='';document.getElementById('dfTo').value='';renderMod()">🗓 Clear Date</button>`:''}
+    </div>`;
+  // selection bar
+  const allFiltIds=filt.map(r=>r._id).join(',');
+  h+=`<div class="sel-bar" id="selBar" data-allids="${allFiltIds}">
+    <div class="sel-bar-left">
+      <span id="selCount">0 selected</span>
+    </div>
+    <div class="sel-bar-right">
+      <button class="btn-clr-sel" onclick="selectAllVisible()">☑ Select All</button>
+      <button class="btn-clr-sel" onclick="clearSel()">✕ Clear</button>
+      <button class="btn-del-sel" onclick="confirmDelSel()">🗑 Delete Selected</button>
+    </div>
+  </div>`;
+
+  if(filt.length===0){
+    h+=`<div class="table-wrap"><div class="empty"><div class="empty-icon">${m.icon}</div>
+      <p>${data.length?'No entries match your search.':'No entries yet — add the first one!'}</p>
+    </div></div>`;
+  } else {
+    const allIds=filt.map(r=>r._id);
+    h+=`<div class="table-wrap"><table><thead><tr>
+      <th style="width:36px;text-align:center"></th>
+      ${cols.map(c=>`<th>${c.label}</th>`).join('')}<th style="width:90px">Actions</th>
+    </tr></thead><tbody>`;
+    filt.forEach(r=>{
+      const isSel=selIds.has(r._id);
+      h+=`<tr class="${isSel?'selected':''}" data-id="${r._id}">
+        <td class="cb-wrap">
+          <input type="checkbox" class="cb-row" ${isSel?'checked':''} onchange="toggleSel('${r._id}',this.checked)"/>
+        </td>
+        ${cols.map(c=>{
+          const v=r[c.key];
+          if(c.key==='status'||c.key==='response')return`<td>${sbadge(v||'')}</td>`;
+          if(c.key==='branch')return`<td><span class="badge badge-info">${v||'—'}</span></td>`;
+          if(c.key==='batch')return`<td><span class="badge badge-neutral">${v||'—'}</span></td>`;
+          if(c.key==='amount')return`<td>${v?'₹'+Number(v).toLocaleString('en-IN'):'—'}</td>`;
+          if(!v)return`<td style="color:var(--muted)">—</td>`;
+          return`<td>${v}</td>`;
+        }).join('')}
+        <td style="white-space:nowrap">
+          <button class="btn btn-secondary btn-sm" onclick="openModal('${r._id}')">✏️</button>
+          <button class="btn btn-danger btn-sm" onclick="confirmDel('${r._id}')">🗑</button>
+        </td></tr>`;
+    });
+    h+=`</tbody></table></div>`;
+  }
+  document.getElementById('mainContent').innerHTML=h;
+}
+
+/* ============================================================
+   ENTRY MODAL
+============================================================ */
+/* ── MULTI SELECT ── */
+function toggleSel(id,checked){
+  if(checked)selIds.add(id);else selIds.delete(id);
+  updateSelBar();
+  const tr=document.querySelector('[data-id="'+id+'"]');
+  if(tr)tr.classList.toggle('selected',checked);
+  const cbAll=document.getElementById('cbAll');
+  if(cbAll){
+    const allCbs=document.querySelectorAll('tbody .cb-row');
+    cbAll.checked=allCbs.length>0&&[...allCbs].every(cb=>cb.checked);
+    cbAll.indeterminate=selIds.size>0&&!cbAll.checked;
+  }
+}
+function toggleAllCsv(checked,idsStr){
+  const ids=idsStr.split(',').filter(Boolean);
+  ids.forEach(id=>checked?selIds.add(id):selIds.delete(id));
+  document.querySelectorAll('tbody .cb-row').forEach(cb=>cb.checked=checked);
+  document.querySelectorAll('tbody tr').forEach(tr=>tr.classList.toggle('selected',checked));
+  updateSelBar();
+}
+
+function selectAllVisible(){
+  const bar=document.getElementById('selBar');
+  if(!bar)return;
+  const ids=bar.dataset.allids.split(',').filter(Boolean);
+  ids.forEach(id=>selIds.add(id));
+  document.querySelectorAll('tbody .cb-row').forEach(cb=>cb.checked=true);
+  document.querySelectorAll('tbody tr').forEach(tr=>tr.classList.add('selected'));
+  updateSelBar();
+}
+function clearSel(){
+  selIds.clear();
+  document.querySelectorAll('.cb-row').forEach(cb=>cb.checked=false);
+  document.querySelectorAll('tbody tr').forEach(tr=>tr.classList.remove('selected'));
+  updateSelBar();
+  const cbAll=document.getElementById('cbAll');
+  if(cbAll){cbAll.checked=false;cbAll.indeterminate=false;}
+}
+function updateSelBar(){
+  const bar=document.getElementById('selBar');
+  const cnt=document.getElementById('selCount');
+  if(!bar)return;
+  if(selIds.size>0){
+    bar.classList.add('show');
+    cnt.textContent=selIds.size+' entr'+(selIds.size===1?'y':'ies')+' selected';
+  } else {
+    bar.classList.remove('show');
+  }
+}
+function confirmDelSel(){
+  if(selIds.size===0)return;
+  const count=selIds.size;
+  const overlay=document.createElement('div');
+  overlay.id='delOverlay';
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(60,20,0,0.5);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  overlay.innerHTML=`<div style="background:#FFFDF9;border-radius:16px;padding:28px;max-width:380px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.25);text-align:center;">
+    <div style="font-size:44px;margin-bottom:12px;">🗑️</div>
+    <h3 style="font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:#3E1F00;margin-bottom:8px;">Delete ${count} ${count===1?'Entry':'Entries'}?</h3>
+    <p style="font-size:13px;color:#9E6B3A;margin-bottom:20px;">This action cannot be undone.</p>
+    <div style="display:flex;gap:10px;justify-content:center;">
+      <button onclick="document.getElementById('delOverlay').remove()" style="padding:9px 20px;border-radius:8px;border:1.5px solid #F0D9BC;background:#FFFDF9;color:#3E1F00;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;">Cancel</button>
+      <button onclick="delSelected();document.getElementById('delOverlay').remove()" style="padding:9px 20px;border-radius:8px;border:none;background:#C62828;color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;">Yes, Delete ${count}</button>
+    </div>
+  </div>`;
+  document.body.appendChild(overlay);
+}
+function delSelected(){
+  const ids=new Set(selIds);
+  sd(curMod,gd(curMod).filter(r=>!ids.has(r._id)));
+  selIds.clear();renderMod();rhdr();rnav();
+}
+
+
+function openModal(id){
+  editId=id||null;
+  const m=MODULES.find(x=>x.id===curMod);
+  const data=gd(curMod);
+  const ent=id?data.find(r=>r._id===id):{};
+  document.getElementById('modalTitle').textContent=id?`Edit Entry — ${m.label}`:`Add New Entry — ${m.label}`;
+  const brs=gbranches();
+  let h=`<div class="form-grid">`;
+  m.fields.forEach(f=>{
+    const val=ent?.[f.k]||'';
+    const cls=f.full?'form-group full':'form-group';
+    h+=`<div class="${cls}"><label>${f.l}${f.req?' *':''}</label>`;
+    if(f.t==='brsel'){
+      h+=`<select class="form-control" id="ff_${f.k}">
+        <option value="">— Select Branch —</option>
+        ${brs.map(b=>`<option value="${b}"${val===b?' selected':''}>${b}</option>`).join('')}
+        <option value="__new__">+ Add new branch...</option>
+      </select>`;
+    } else if(f.t==='sel'){
+      h+=`<select class="form-control" id="ff_${f.k}">
+        <option value="">— Select —</option>
+        ${f.opts.map(o=>`<option${val===o?' selected':''}>${o}</option>`).join('')}
+      </select>`;
+    } else if(f.t==='ta'){
+      h+=`<textarea class="form-control" id="ff_${f.k}" rows="3" style="resize:vertical">${val}</textarea>`;
+    } else {
+      h+=`<input class="form-control" type="${f.t}" id="ff_${f.k}" value="${val}" placeholder="${f.l}"/>`;
+    }
+    h+=`</div>`;
+  });
+  h+=`</div>`;
+  document.getElementById('modalForm').innerHTML=h;
+  const bs=document.getElementById('ff_branch');
+  if(bs){
+    bs.addEventListener('change',function(){
+      if(this.value==='__new__'){
+        const nb=prompt('Enter new branch code (e.g. BLR, MUM):');
+        if(nb&&nb.trim()){
+          const bv=nb.trim().toUpperCase();
+          const s=gst();if(!s.branches)s.branches=[];
+          if(!s.branches.includes(bv))s.branches.push(bv);sst(s);
+          const op=new Option(bv,bv,true,true);
+          this.insertBefore(op,this.querySelector('[value="__new__"]'));
+          this.value=bv;
+        } else this.value='';
+      }
+    });
+  }
+  document.getElementById('modalBg').classList.add('open');
+}
+function closeModal(){document.getElementById('modalBg').classList.remove('open');editId=null;}
+function saveEntry(){
+  const m=MODULES.find(x=>x.id===curMod);
+  const data=gd(curMod);const ent={};let ok=true;
+  m.fields.forEach(f=>{
+    const el=document.getElementById('ff_'+f.k);
+    if(el){
+      ent[f.k]=el.value.trim();
+      if(f.req&&!ent[f.k]){el.style.borderColor='#C62828';ok=false;}
+      else el.style.borderColor='';
+    }
+  });
+  if(!ok){alert('Please fill in all required fields marked with *.');return;}
+  if(editId){const i=data.findIndex(r=>r._id===editId);if(i>-1)data[i]={...data[i],...ent};}
+  else{ent._id=uid();ent._createdAt=Date.now();data.push(ent);}
+  sd(curMod,data);closeModal();renderMod();rhdr();rnav();
+}
+function delEntry(id){
+  sd(curMod,gd(curMod).filter(r=>r._id!==id));renderMod();rhdr();rnav();
+}
+function confirmDel(id){
+  const overlay=document.createElement('div');
+  overlay.id='delOverlay';
+  overlay.style.cssText='position:fixed;inset:0;background:rgba(60,20,0,0.5);z-index:999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  overlay.innerHTML=`<div style="background:#FFFDF9;border-radius:16px;padding:28px;max-width:380px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.25);text-align:center;">
+    <div style="font-size:44px;margin-bottom:12px;">🗑️</div>
+    <h3 style="font-family:'Playfair Display',serif;font-size:18px;font-weight:600;color:#3E1F00;margin-bottom:8px;">Delete Entry?</h3>
+    <p style="font-size:13px;color:#9E6B3A;margin-bottom:20px;">This action cannot be undone.</p>
+    <div style="display:flex;gap:10px;justify-content:center;">
+      <button onclick="document.getElementById('delOverlay').remove()" style="padding:9px 20px;border-radius:8px;border:1.5px solid #F0D9BC;background:#FFFDF9;color:#3E1F00;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;">Cancel</button>
+      <button onclick="delEntry('${id}');document.getElementById('delOverlay').remove()" style="padding:9px 20px;border-radius:8px;border:none;background:#C62828;color:#fff;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:500;cursor:pointer;">Yes, Delete</button>
+    </div>
+  </div>`;
+  document.body.appendChild(overlay);
+}
+
+/* ============================================================
+   REPORT TABLE
+============================================================ */
+function compRow(branch){
+  const row={branch};
+  MODULES.forEach((m,mi)=>{
+    const ents=branch==='__ALL__'?gd(m.id):gd(m.id).filter(r=>r.branch===branch);
+    const tgt=gtgt(m.id);const alumni=ents.length;
+    const reached=tgt>0?Math.round((alumni/tgt)*100):0;
+    row[m.id]={alumni,tgt,reached};
+  });
+  return row;
+}
+function rclass(v){return v>=100?'rhi':v>=50?'rmd':'rlo';}
+function buildRow(row,isTot){
+  const tc=isTot?' rdctot':'';
+  let tr=`<tr><td class="rdcbr${tc}">${row.branch==='__ALL__'?'TOTAL':row.branch}</td>`;
+  MODULES.forEach((m,mi)=>{
+    const d=row[m.id]||{alumni:0,tgt:gtgt(m.id),reached:0};
+    RCOLS[mi].forEach(col=>{
+      let val='';
+      if(col.k==='alumni')val=d.alumni;
+      else if(col.k==='target')val=d.tgt;
+      else if(col.k==='reached')val=`<span class="${rclass(d.reached)}">${d.reached}</span>`;
+      tr+=`<td class="${RDCLS[mi]}${tc}">${val}</td>`;
+    });
+  });
+  return tr+'</tr>';
+}
+function modHdr(mi){
+  const tgt=gtgt(MODULES[mi].id);
+  return[
+    `Alumni Get-Together`,`Alumni Visit - ${tgt}`,`Alumni Padharamani`,
+    `Alumni Seva - ${tgt}`,`Birthday Calls - ${tgt}`,
+    `Share Birthday Gift - ${tgt}`,`Calls by Saint - ${tgt}`
+  ][mi];
+}
+function showReport(){
+  curMod='report';rnav();rhdr();
+  const brs=gbranches();const title=gqtitle();
+  let h=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px;">
+    <div>
+      <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:600;color:var(--deep);">📊 Report Table</div>
+      <p style="font-size:13px;color:var(--muted);margin-top:3px;">${gtotal()} records · ${brs.length} branches · Reached% = (Count ÷ Target) × 100</p>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <button class="btn btn-info btn-sm" onclick="openSettings()">⚙️ Settings</button>
+      <button class="btn btn-success" onclick="dlCSV()">⬇️ Download Excel / CSV</button>
+    </div>
+  </div>`;
+  if(brs.length===0){
+    h+=`<div class="table-wrap"><div class="empty"><div class="empty-icon">📊</div>
+      <p>No data yet. Add entries with Branch field filled — report will appear here automatically.</p>
+    </div></div>`;
+  } else {
+    const totalCols=1+RCOLS.reduce((a,b)=>a+b.length,0);
+    h+=`<div class="report-outer"><table class="rtbl">
+      <thead>
+        <tr><th class="rth-title" colspan="${totalCols}">${title}</th></tr>
+        <tr><th class="rth-br" rowspan="2">Branch</th>
+          ${MODULES.map((m,mi)=>`<th class="${RCLS[mi]}" colspan="${RCOLS[mi].length}">${modHdr(mi)}</th>`).join('')}
+        </tr>
+        <tr>${MODULES.map((m,mi)=>RCOLS[mi].map(c=>`<th class="${RSCLS[mi]}">${c.l}</th>`).join('')).join('')}</tr>
+      </thead>
+      <tbody>
+        ${brs.map(br=>buildRow(compRow(br),false)).join('')}
+        ${buildRow(compRow('__ALL__'),true)}
+      </tbody>
+    </table></div>`;
+  }
+  document.getElementById('mainContent').innerHTML=h;
+}
+
+/* ============================================================
+   CSV DOWNLOAD
+============================================================ */
+function dlCSV(){
+  const brs=gbranches();const title=gqtitle();
+  const totalCols=1+RCOLS.reduce((a,b)=>a+b.length,0);
+  const rows=[];
+  rows.push([title,...Array(totalCols-1).fill('')]);
+  const h1=['Branch'];MODULES.forEach((m,mi)=>{h1.push(modHdr(mi));for(let i=1;i<RCOLS[mi].length;i++)h1.push('');});
+  rows.push(h1);
+  const h2=[''];MODULES.forEach((m,mi)=>RCOLS[mi].forEach(c=>h2.push(c.l)));
+  rows.push(h2);
+  function makeRow(branch){
+    const r=[branch==='__ALL__'?'TOTAL':branch];
+    MODULES.forEach((m,mi)=>{
+      const ents=branch==='__ALL__'?gd(m.id):gd(m.id).filter(x=>x.branch===branch);
+      const tgt=gtgt(m.id);const alumni=ents.length;
+      const reached=tgt>0?Math.round((alumni/tgt)*100):0;
+      RCOLS[mi].forEach(col=>{
+        if(col.k==='alumni')r.push(alumni);
+        else if(col.k==='target')r.push(tgt);
+        else if(col.k==='reached')r.push(reached);
+      });
+    });
+    return r;
+  }
+  brs.forEach(b=>rows.push(makeRow(b)));
+  rows.push(makeRow('__ALL__'));
+  const csv=rows.map(row=>row.map(v=>{
+    const s=String(v==null?'':v);
+    return(s.includes(',')||s.includes('"')||s.includes('\n'))?`"${s.replace(/"/g,'""')}"`  :s;
+  }).join(',')).join('\n');
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download='Alumni_Report_'+new Date().toISOString().split('T')[0]+'.csv';
+  document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+}
+
+/* ============================================================
+   SETTINGS
+============================================================ */
+function openSettings(){
+  const s=gst();
+  document.getElementById('sTitleInput').value=gqtitle();
+  const aq=s.activeQuarter||'Q1';
+  if(document.getElementById('activeQtSelect'))
+    document.getElementById('activeQtSelect').value=aq;
+  renderQtTargets(aq);
+  renderBrList();
+  document.getElementById('settingsBg').classList.add('open');
+}
+function renderQtTargets(qt){
+  const s=gst();
+  const qtTargets=(s.quarters&&s.quarters[qt])||{};
+  // Tab active state
+  ['Q1','Q2','Q3','Q4'].forEach(q=>{
+    const btn=document.getElementById('qtb'+q);
+    if(btn){
+      btn.classList.toggle('active',q===qt);
+      btn.dataset.qt=q;
+    }
+  });
+  const aq=s.activeQuarter||'Q1';
+  const lbl=document.getElementById('qtActiveLabel');
+  if(lbl)lbl.textContent=qt===aq?'✅ This is the currently Active Quarter — charts & report use these targets':'';
+  let tg='';
+  MODULES.forEach(m=>{
+    const v=qtTargets[m.id]!=null?qtTargets[m.id]:m.defTarget;
+    tg+=`<div class="stg-item"><label>${m.icon} ${m.short}</label>
+      <input class="form-control" type="number" id="tg_${m.id}" value="${v}" min="1"
+        oninput="autoSaveQtTarget('${m.id}',this.value,'${qt}')"/></div>`;
+  });
+  document.getElementById('targetsGrid').innerHTML=tg;
+}
+function switchQtTab(qt){
+  renderQtTargets(qt);
+}
+function autoSaveQtTarget(mid,val,qt){
+  const s=gst();
+  if(!s.quarters)s.quarters={};
+  if(!s.quarters[qt])s.quarters[qt]={};
+  s.quarters[qt][mid]=Number(val)||1;
+  sst(s);
+}
+function renderBrList(){
+  document.getElementById('branchList').innerHTML=(gst().branches||[]).map(b=>`
+    <div style="display:flex;align-items:center;gap:6px;background:var(--light-amber);
+      padding:4px 12px;border-radius:20px;border:1px solid var(--border);">
+      <span style="font-size:13px;font-weight:600;">${b}</span>
+      <button onclick="rmBr('${b}')" style="background:none;border:none;cursor:pointer;color:var(--danger);font-size:14px;padding:0;line-height:1;">✕</button>
+    </div>`).join('');
+}
+function addBranch(){
+  const inp=document.getElementById('newBranchInp');
+  const v=inp.value.trim().toUpperCase();if(!v)return;
+  const s=gst();if(!s.branches)s.branches=[];
+  if(!s.branches.includes(v))s.branches.push(v);
+  sst(s);inp.value='';renderBrList();
+}
+function rmBr(b){
+  const s=gst();s.branches=(s.branches||[]).filter(x=>x!==b);sst(s);renderBrList();
+}
+function saveSettings(){
+  const s=gst();
+  s.qTitle=document.getElementById('sTitleInput').value.trim()||'Quarter - 4 (Achieve Anyone - Alumni)';
+  // Save active quarter selection
+  const aqSel=document.getElementById('activeQtSelect');
+  if(aqSel)s.activeQuarter=aqSel.value;
+  // Save current tab's targets too
+  const activeTab=document.querySelector('.stg-qt-btn.active');
+  const qt=activeTab?activeTab.dataset.qt||activeTab.textContent.trim():'Q1';
+  if(!s.quarters)s.quarters={};
+  if(!s.quarters[qt])s.quarters[qt]={};
+  MODULES.forEach(m=>{
+    const el=document.getElementById('tg_'+m.id);
+    if(el)s.quarters[qt][m.id]=Number(el.value)||m.defTarget;
+  });
+  sst(s);closeSettings();
+  if(curMod==='report')showReport();
+  if(curMod===null)showDash();
+  rhdr();
+}
+function closeSettings(){document.getElementById('settingsBg').classList.remove('open');}
+
+/* ============================================================
+   BULK IMPORT
+============================================================ */
+function dlTemplate(){
+  const m=MODULES.find(x=>x.id===curMod);
+  const labels=m.fields.map(f=>f.l);
+  const sample=m.fields.map(f=>{
+    if(f.t==='brsel')return gbranches()[0]||'BLR';
+    if(f.t==='sel')return f.opts?f.opts[0]:'';
+    if(f.t==='date')return new Date().toISOString().split('T')[0];
+    if(f.t==='time')return'10:00';
+    if(f.t==='number')return'1';
+    if(f.k==='name')return'Ramesh Patel';
+    if(f.k==='phone')return'9876543210';
+    if(f.k==='city')return'Ahmedabad';
+    if(f.k==='batch')return'2019';
+    if(f.k==='email')return'ramesh@example.com';
+    return'';
+  });
+  const csv=[labels.join(','),sample.map(v=>`"${v}"`).join(',')].join('\n');
+  const blob=new Blob(['\uFEFF'+csv],{type:'text/csv;charset=utf-8;'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url;a.download=`Template_${m.short.replace(/[^a-z0-9]/gi,'_')}.csv`;
+  document.body.appendChild(a);a.click();document.body.removeChild(a);URL.revokeObjectURL(url);
+}
+function openBulk(){
+  bulkStep=1;bulkRows=[];
+  const m=MODULES.find(x=>x.id===curMod);
+  document.getElementById('bulkTitle').textContent=`📥 Bulk Import — ${m.label}`;
+  renderBulkStep();
+  document.getElementById('bulkBg').classList.add('open');
+}
+function closeBulk(){document.getElementById('bulkBg').classList.remove('open');bulkRows=[];}
+function setBulkSteps(active){
+  [1,2,3].forEach(i=>{
+    const el=document.getElementById('bstep'+i);
+    el.className='bulk-step'+(i<active?' done':i===active?' active':'');
+  });
+}
+function renderBulkStep(){
+  setBulkSteps(bulkStep);
+  const m=MODULES.find(x=>x.id===curMod);
+  const body=document.getElementById('bulkBody');
+  const acts=document.getElementById('bulkActions');
+  if(bulkStep===1){
+    const reqF=m.fields.filter(f=>f.req).map(f=>f.l);
+    body.innerHTML=`
+      <div style="margin-bottom:16px;padding:16px;background:var(--light-amber);border-radius:10px;border:1px solid var(--border);">
+        <p style="font-size:13px;font-weight:700;color:var(--deep);margin-bottom:8px;">📋 Step 1: Download the Template first</p>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:12px;">Download the Excel-ready CSV template below. All columns are pre-filled. Complete the data, save the file, then upload it in Step 2.</p>
+        <p style="font-size:12px;font-weight:600;color:var(--muted);margin-bottom:6px;">REQUIRED FIELDS (must fill):</p>
+        <div class="tmpl-fields">${reqF.map(l=>`<span class="tmpl-field req">* ${l}</span>`).join('')}</div>
+        <p style="font-size:12px;font-weight:600;color:var(--muted);margin:10px 0 6px;">ALL COLUMNS:</p>
+        <div class="tmpl-fields">${m.fields.map(f=>`<span class="tmpl-field">${f.l}</span>`).join('')}</div>
+      </div>
+      <div style="padding:14px;background:#E8F5E9;border-radius:10px;border:1px solid #A5D6A7;">
+        <p style="font-size:13px;color:#2E7D32;font-weight:600;">✅ Important Notes:</p>
+        <ul style="font-size:12px;color:#1B5E20;margin-top:6px;padding-left:18px;line-height:2;">
+          <li>Keep column headers exactly the same as in the template</li>
+          <li>Date format: <strong>YYYY-MM-DD</strong> (e.g. 2025-03-15)</li>
+          <li>Enter exact branch code in the Branch column (e.g. BLR, MUM)</li>
+          <li>Enter only allowed values in the Status column</li>
+          <li>A CSV file can contain any number of rows</li>
+        </ul>
+      </div>`;
+    acts.innerHTML=`
+      <button class="btn btn-secondary" onclick="closeBulk()">Cancel</button>
+      <button class="btn btn-success" onclick="dlTemplate()">⬇️ Download Template CSV</button>
+      <button class="btn btn-primary" onclick="bulkStep=2;renderBulkStep()">Next: Upload File →</button>`;
+  } else if(bulkStep===2){
+    body.innerHTML=`
+      <div class="drop-zone" id="dropZone" onclick="document.getElementById('bulkFileInp').click()">
+        <div class="drop-zone-icon">📂</div>
+        <p><strong>Click here or drag & drop your file</strong></p>
+        <p>Select a CSV or Excel (.xlsx) file</p>
+        <small>Supported: .csv, .xlsx, .xls</small>
+      </div>
+      <input type="file" id="bulkFileInp" accept=".csv,.xlsx,.xls" style="display:none" onchange="handleBulkFile(this)"/>
+      <div id="bulkFileStatus" style="margin-top:10px;font-size:13px;color:var(--muted);text-align:center;"></div>`;
+    acts.innerHTML=`
+      <button class="btn btn-secondary" onclick="bulkStep=1;renderBulkStep()">← Back</button>
+      <button class="btn btn-secondary" onclick="closeBulk()">Cancel</button>`;
+    const dz=document.getElementById('dropZone');
+    dz.addEventListener('dragover',e=>{e.preventDefault();dz.classList.add('drag');});
+    dz.addEventListener('dragleave',()=>dz.classList.remove('drag'));
+    dz.addEventListener('drop',e=>{e.preventDefault();dz.classList.remove('drag');const f=e.dataTransfer.files[0];if(f)processFile(f);});
+  } else if(bulkStep===3){
+    const m2=MODULES.find(x=>x.id===curMod);
+    const okRows=bulkRows.filter(r=>r._valid);
+    const errRows=bulkRows.filter(r=>!r._valid);
+    const previewCols=m2.fields.slice(0,6);
+    body.innerHTML=`
+      <div class="bulk-summary">
+        <span class="bulk-pill bulk-pill-tot">Total: ${bulkRows.length}</span>
+        <span class="bulk-pill bulk-pill-ok">✅ Ready: ${okRows.length}</span>
+        ${errRows.length?`<span class="bulk-pill bulk-pill-err">⚠️ Errors: ${errRows.length}</span>`:''}
+      </div>
+      ${errRows.length?`<p style="font-size:12px;color:#C62828;margin-bottom:10px;">⚠️ Red rows have missing required fields and will be skipped. Only green rows will be imported.</p>`:''}
+      <div class="bulk-preview"><table><thead><tr><th>#</th>
+        ${previewCols.map(f=>`<th>${f.l}</th>`).join('')}<th>Status</th>
+      </tr></thead><tbody>
+        ${bulkRows.map((row,i)=>`<tr class="${row._valid?'row-ok':'row-err'}">
+          <td>${i+1}</td>${previewCols.map(f=>`<td>${row[f.k]||'—'}</td>`).join('')}
+          <td>${row._valid?'✅ OK':'❌ '+row._err}</td>
+        </tr>`).join('')}
+      </tbody></table></div>`;
+    acts.innerHTML=`
+      <button class="btn btn-secondary" onclick="bulkStep=2;renderBulkStep()">← Re-upload</button>
+      <button class="btn btn-secondary" onclick="closeBulk()">Cancel</button>
+      ${okRows.length?`<button class="btn btn-primary" onclick="confirmBulkImport()">💾 Import ${okRows.length} Entries</button>`:'<button class="btn btn-secondary" disabled>No Valid Rows</button>'}`;
+  }
+}
+function handleBulkFile(inp){const f=inp.files[0];if(f)processFile(f);}
+function processFile(file){
+  document.getElementById('bulkFileStatus').textContent='⏳ Processing file...';
+  const ext=file.name.split('.').pop().toLowerCase();
+  if(ext==='csv'){
+    const reader=new FileReader();
+    reader.onload=e=>parseCSVText(e.target.result);
+    reader.readAsText(file,'UTF-8');
+  } else {
+    const reader=new FileReader();
+    reader.onload=e=>{
+      if(window.XLSX){
+        const wb=window.XLSX.read(e.target.result,{type:'binary'});
+        const ws=wb.Sheets[wb.SheetNames[0]];
+        parseCSVText(window.XLSX.utils.sheet_to_csv(ws));
+      } else {
+        document.getElementById('bulkFileStatus').textContent='⚠️ For Excel files, please use CSV format. Download the template CSV, fill it in Excel, then save as CSV.';
+      }
+    };
+    reader.readAsBinaryString(file);
+  }
+}
+function parseCSVText(text){
+  const m=MODULES.find(x=>x.id===curMod);
+  const fieldLabels=m.fields.map(f=>f.l.toLowerCase().trim());
+  const fieldKeys=m.fields.map(f=>f.k);
+  const reqKeys=m.fields.filter(f=>f.req).map(f=>f.k);
+  const lines=text.split(/\r?\n/).filter(l=>l.trim());
+  if(lines.length<2){document.getElementById('bulkFileStatus').textContent='❌ No data found in the file or the format is incorrect.';return;}
+  const headers=parseCSVLine(lines[0]).map(h=>h.toLowerCase().trim());
+  const colMap=headers.map(h=>{
+    let idx=fieldLabels.indexOf(h);if(idx>-1)return fieldKeys[idx];
+    idx=fieldKeys.indexOf(h);if(idx>-1)return fieldKeys[idx];return null;
+  });
+  const parsed=[];
+  for(let i=1;i<lines.length;i++){
+    if(!lines[i].trim())continue;
+    const vals=parseCSVLine(lines[i]);const row={};
+    colMap.forEach((key,ci)=>{if(key)row[key]=vals[ci]||'';});
+    const missing=reqKeys.filter(k=>!row[k]||!row[k].toString().trim());
+    row._valid=missing.length===0;
+    row._err=missing.length?'Missing: '+missing.map(k=>m.fields.find(f=>f.k===k)?.l||k).join(', '):'';
+    parsed.push(row);
+  }
+  bulkRows=parsed;bulkStep=3;renderBulkStep();
+}
+function parseCSVLine(line){
+  const result=[];let cur='';let inQ=false;
+  for(let i=0;i<line.length;i++){
+    const ch=line[i];
+    if(ch==='"'){if(inQ&&line[i+1]==='"'){cur+='"';i++;}else inQ=!inQ;}
+    else if(ch===','&&!inQ){result.push(cur.trim());cur='';}
+    else cur+=ch;
+  }
+  result.push(cur.trim());return result;
+}
+function confirmBulkImport(){
+  const data=gd(curMod);
+  bulkRows.filter(r=>r._valid).forEach(row=>{
+    const ent={...row};delete ent._valid;delete ent._err;
+    ent._id=uid();ent._createdAt=Date.now();data.push(ent);
+  });
+  const cnt=bulkRows.filter(r=>r._valid).length;
+  sd(curMod,data);closeBulk();renderMod();rhdr();rnav();
+  setTimeout(()=>alert(`✅ ${cnt} entries imported successfully!`),100);
+}
+
+/* ============================================================
+   EVENT LISTENERS & INIT
+============================================================ */
+document.getElementById('modalBg').addEventListener('click',function(e){if(e.target===this)closeModal();});
+document.getElementById('settingsBg').addEventListener('click',function(e){if(e.target===this)closeSettings();});
+document.getElementById('bulkBg').addEventListener('click',function(e){if(e.target===this)closeBulk();});
+
+// Pre-load default branches on first launch
+(function(){
+  const DEFAULT_BRANCHES=['HYD-DAY','HYD-HST','BLR','GLB','RPR','JDC','VJW',
+    'NGP','MUM','VDN','BDR','SLP','NTPC','SBD','MYS','SYP','AMD'];
+  const s=gst();
+  if(!s.branches||s.branches.length===0){s.branches=DEFAULT_BRANCHES;sst(s);}
+})();
+
+
+
+/* ── BAR COLOR BY VALUE ── */
+// val = actual count, target = module target for active quarter
+function barColor(val, target){
+  if(!target||target===0)return'#9E9E9E';
+  const pct=(val/target)*100;
+  if(pct>=100)return'#2E7D32';  // Green - target achieved/exceeded
+  if(pct>=50)return'#E65100';   // Orange - 50-99% of target
+  return'#C62828';              // Red - below 50% of target
+}
+function barColorLight(val, target){
+  if(!target||target===0)return'#F5F5F5';
+  const pct=(val/target)*100;
+  if(pct>=100)return'#E8F5E9';
+  if(pct>=50)return'#FFF3E0';
+  return'#FFEBEE';
+}
+
+/* ── DARK MODE ── */
+function toggleDark(){
+  const isDark=document.body.classList.toggle('dark');
+  localStorage.setItem('acrm_dark',isDark?'1':'0');
+  updateDarkIcon(isDark);
+}
+function updateDarkIcon(isDark){
+  const icon=document.getElementById('darkIcon');
+  if(icon)icon.textContent=isDark?'☀️':'🌙';
+}
+// Load saved preference
+(function(){
+  const saved=localStorage.getItem('acrm_dark');
+  if(saved==='1'){
+    document.body.classList.add('dark');
+    updateDarkIcon(true);
+  }
+})();
+
+showDash();
+</script>
+</body>
+</html>
