@@ -1,0 +1,31 @@
+# OS generated files (System files jo Git mein nahi chahiye)
+.DS_Store
+.DS_Store?
+._*
+Thumbs.db
+ehthumbs.db
+
+# Editor/IDE files (Aapke code editor ki settings)
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs and temporary files
+*.log
+npm-debug.log*
+yarn-debug.log*
+
+# Data & Backups (Agar aap local data files rakhte hain)
+*.csv
+*.xlsx
+# Note: Agar aapne template files rakhi hain to unhe 'templates/' folder mein rakh kar exclude kar sakte hain.
+
+# Environment variables (Future mein agar API keys use karein)
+.env
+.env.local
+
+# Build folders (Agar aap Vite ya React use karein future mein)
+node_modules/
+dist/
+build/
